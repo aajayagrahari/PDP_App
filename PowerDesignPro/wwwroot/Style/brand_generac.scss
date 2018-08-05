@@ -1,0 +1,37 @@
+﻿/* Brand Colors */
+$color-red: #FF0000;
+$color-green: #00FF00;
+$color-blue: #0000FF;
+
+$brand-primary: #e4701d;
+$brand-success:;
+$brand-info:;
+$brand-warning:;
+$brand-danger:;
+
+$brand-darker: darken($brand-primary, 20%);
+$brand-dark: darken($brand-primary, 13.5%);
+$brand-light: lighten($brand-primary, 20%);
+$brand-lighter: lighten($brand-primary, 40%);
+
+.table-hover > tbody > tr:hover {
+    background-color: $brand-lighter;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: $brand-primary !important;
+    border-color: $brand-darker !important;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    color: #fff;
+    background-color: $brand-dark !important;
+    border-color: $brand-darker !important;
+}
+
+.btn-primary:active {
+    color: #fff;
+    background-color: $brand-darker !important;
+    border-color: $brand-darker !important;
+}

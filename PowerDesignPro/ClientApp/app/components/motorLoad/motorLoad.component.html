@@ -1,0 +1,166 @@
+﻿<form #motorLoadForm="ngForm" (ngSubmit)="SaveLoadDetails(motorLoadForm.valid)" name="motorLoadForm">
+        <div class="col-sm-12 col-md-8">
+            <div class="col-sm-6">
+                <h4 class="text-primary" translate>motorLoad.LoadMotor</h4>
+                <div class="form-group indent">
+                    <label translate>motorLoad.Description</label>
+                    <input type="text" class="form-control required" name="Description" placeholder="{{'motorLoad.Description' | translate}}" [(ngModel)]="MotorLoadDto.Description"
+                           required #Description="ngModel" />
+                    <div *ngIf="(Description.invalid && (Description.dirty || Description.touched)) && Description?.errors.required || (motorLoadForm.submitted && Description.invalid)"
+                         class="alert alert-danger" translate>
+                        motorLoad.DescriptionAlert
+                    </div>
+                </div>
+                <div class="form-group indent">
+                    <label translate>motorLoad.Quantity</label>
+                    <input type="text" OnlyNumeric="true" pattern="^0*[1-9]\d*$" class="form-control" name="Quantity" placeholder="Quantity" [(ngModel)]="MotorLoadDto.Quantity"
+                           required #Quantity="ngModel" (keyup)="CalculateLoadCharacteristicsInputs()" />
+                    <div *ngIf="(Quantity.invalid && (Quantity.dirty || Quantity.touched)) && Quantity?.errors.required || (motorLoadForm.submitted && Quantity.invalid)"
+                         class="alert alert-danger" translate>
+                        motorLoad.QuantityAlert
+                    </div>
+                </div>
+                <div class="form-group indent">
+                    <label translate>motorLoad.Sequence</label>
+                    <select class="form-control" [(ngModel)]="MotorLoadDto.SequenceID" name="Sequence" required #Sequence="ngModel" (change)="CalculateLoadCharacteristicsInputs()">
+                        <option value="{{seq.ID}}" *ngFor="let seq of MotorLoadDto?.MotorLoadPickListDto?.SequenceList">{{seq.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+
+                <div class="form-group indent" *ngIf="MotorLoadDto.SizeRunningEditable">
+                    <label translate>motorLoad.SizeRunning</label>
+                    <div class="form-inline">
+                        <input type="text" OnlyNumeric="true" pattern="^[1-9][0-9]*(\.[0-9]+)?|\.[0-9]*[1-9][0-9]*$" required class="form-control" name="SizeRunning" placeholder="Size Running" [(ngModel)]="MotorLoadDto.SizeRunning"
+                               #SizeRunning="ngModel" (keyup)="SizeRunningChanged()" />
+                        <select class="form-control" [(ngModel)]="MotorLoadDto.SizeRunningUnitsID" name="SizeRunningUnit" required #SizeRunningUnit="ngModel" (change)="MapSizeUnitChange(MotorLoadDto.SizeRunning, 'running')">
+                            <option value="{{size.ID}}" *ngFor="let size of MotorLoadDto?.MotorLoadPickListDto?.SizeUnitsList">{{size.LanguageKey | translate}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="(SizeRunning.invalid && (SizeRunning.dirty || SizeRunning.touched)) && SizeRunning?.errors.required || (motorLoadForm.submitted && SizeRunning.invalid)"
+                         class="alert alert-danger" translate>
+                        motorLoad.SizeAlert
+                    </div>
+                </div>
+                <h4 class="text-primary" translate>motorLoad.MotorCharacteristics</h4>
+                <div class="form-group indent" *ngIf="MotorLoadDto.MotorTypeEditable">
+                    <label translate>motorLoad.MotorType</label>
+                    <select class="form-control" [(ngModel)]="MotorLoadDto.MotorTypeID" name="MotorType" required #MotorType="ngModel"
+                            (change)="MapMotorType(MotorLoadDto.MotorTypeID)">
+                        <option value="{{dt.ID}}" *ngFor="let dt of MotorLoadDto?.MotorLoadPickListDto?.MotorTypeList">{{dt.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+                <div class="form-group indent" *ngIf="MotorLoadDto.StartingCodeEditable">
+                    <label translate>motorLoad.StartingCode</label>
+                    <select class="form-control" [(ngModel)]="MotorLoadDto.StartingCodeID" name="StartingCode" required #StartingCode="ngModel"
+                            (change)="CalculateLoadCharacteristicsInputs()">
+                        <option value="{{dt.ID}}" *ngFor="let dt of MotorLoadDto?.MotorLoadPickListDto?.StartingCodeList">{{dt.LanguageKey | translate}}</option>
+                        <!--{{dt.LanguageKey | translate}}-->
+                    </select>
+                </div>
+                <div >
+                    <h4 class="text-primary" *ngIf="MotorLoadDto.StartingMethodEditable || MotorLoadDto.HarmonicTypeEditable || MotorLoadDto.ConfigurationInputEditable;">Starting Load</h4>
+                    <div class="form-group indent" *ngIf="MotorLoadDto.StartingMethodEditable">
+                        <label translate>motorLoad.StartingMethod</label>
+                        <select class="form-control" [(ngModel)]="MotorLoadDto.StartingMethodID" name="StartingMethod" required #StartingMethod="ngModel"
+                                (change)="MapHarmonicDeviceType(MotorLoadDto.StartingMethodID)">
+                            <option value="{{dt.ID}}" *ngFor="let dt of MotorLoadDto?.MotorLoadPickListDto?.StartingMethodList">{{dt.LanguageKey | translate}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group indent" *ngIf="MotorLoadDto.HarmonicTypeEditable">
+                        <label translate>motorLoad.DeviceType</label>
+                        <select class="form-control" [(ngModel)]="MotorLoadDto.HarmonicDeviceTypeID" name="HarmonicDeviceType" required #HarmonicDeviceType="ngModel"
+                                (change)="MapHarmonicDeviceTypeChange(MotorLoadDto.HarmonicDeviceTypeID)">
+                            <option value="{{dt.ID}}" *ngFor="let dt of MotorLoadDto?.MotorLoadPickListDto?.HarmonicDeviceTypeList">{{dt.LanguageKey | translate}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group indent" *ngIf="MotorLoadDto.ConfigurationInputEditable">
+                        <label translate>motorLoad.ConfigurationInput</label>
+                        <select class="form-control" [(ngModel)]="MotorLoadDto.ConfigurationInputID" name="ConfigurationInput" required #ConfigurationInput="ngModel"
+                                (change)="CalculateLoadCharacteristicsInputs()">
+                            <option value="{{dt.ID}}" *ngFor="let dt of MotorLoadDto?.MotorLoadPickListDto?.ConfigurationInputList">{{dt.Description}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group indent" *ngIf="MotorLoadDto.HarmonicTypeEditable">
+                        <label translate>{{'motorLoad.HarmonicContent' | translate}} (THID %)</label>
+                        <select class="form-control" [(ngModel)]="MotorLoadDto.HarmonicContentID" name="HarmonicContent" required #HarmonicContentType="ngModel"
+                                (change)="CalculateHarmonicDistortionInputs()">
+                            <option value="{{hct.ID}}" *ngFor="let hct of MotorLoadDto?.MotorLoadPickListDto?.HarmonicContentList">{{hct.Description}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <h4 class="text-primary" translate>motorLoad.DeviceInformation</h4>
+                <div class="form-group indent">
+                    <label translate>motorLoad.VoltagePhase</label>
+                    <select class="form-control" [(ngModel)]="MotorLoadDto.VoltagePhaseID" name="VoltagePhase" required #VoltagePhase="ngModel" (change)="MapVoltageNominal(MotorLoadDto.VoltagePhaseID, MotorLoadDto.FrequencyID)">
+                        <option value="{{phase.ID}}" *ngFor="let phase of MotorLoadDto?.MotorLoadPickListDto?.VoltagePhaseList">{{phase.LanguageKey | translate}}</option>
+                    </select>
+                   
+                </div>
+                <div class="form-group indent">
+                    <label translate>motorLoad.VoltageNominal</label>
+                    <select class="form-control" [(ngModel)]="MotorLoadDto.VoltageNominalID" name="VoltageNominal" required #VoltageNominal="ngModel" (change)="MapVoltageSpecific(MotorLoadDto.VoltageNominalID)">
+                        <option value="{{voltage.ID}}" *ngFor="let voltage of MotorLoadDto?.MotorLoadPickListDto?.VoltageNominalList">{{voltage.Description}}</option>
+                    </select>
+                </div>
+                <div class="form-group indent">
+                    <label translate>motorLoad.VoltageSpecific</label>
+                    <select class="form-control" [(ngModel)]="MotorLoadDto.VoltageSpecificID" name="VoltageSpecific" required #VoltageSpecific="ngModel" (change)="MapVoltageSpecificChange(MotorLoadDto.VoltageDipUnitsID)">
+                        <option value="{{voltage.ID}}" *ngFor="let voltage of MotorLoadDto?.MotorLoadPickListDto?.VoltageSpecificList">{{voltage.Description}}</option>
+                    </select>
+                </div>
+                <h4 class="text-primary" translate>motorLoad.MaximumAllowableTransients</h4>
+                <div class="form-group indent">
+                    <label translate>motorLoad.VoltageDip</label>
+                    <div class="form-inline">
+                        <select class="form-control" [(ngModel)]="MotorLoadDto.VoltageDipID" name="VoltageDip" required #VoltageDip="ngModel">
+                            <option value="{{vDip.ID}}" *ngFor="let vDip of MotorLoadDto?.MotorLoadPickListDto?.VoltageDipList">{{vDip.Description}}</option>
+                        </select>
+                        <select class="form-control" [(ngModel)]="MotorLoadDto.VoltageDipUnitsID" name="VoltageDipUnits" required #VoltageDipUnits="ngModel" (change)="MapVoltageDipUnitsChange(MotorLoadDto.VoltageDipUnitsID)">
+                            <option value="{{vDU.ID}}" *ngFor="let vDU of MotorLoadDto?.MotorLoadPickListDto?.VoltageDipUnitsList">{{vDU.LanguageKey | translate}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group indent">
+                    <label translate>motorLoad.FrequencyDip</label>
+                    <div class="form-inline">
+                        <select class="form-control" [(ngModel)]="MotorLoadDto.FrequencyDipID" name="FrequencyDip" required #FrequencyDip="ngModel">
+                            <option value="{{fDip.ID}}" *ngFor="let fDip of MotorLoadDto?.MotorLoadPickListDto?.FrequencyDipList">{{fDip.Description}}</option>
+                        </select>
+                        <select class="form-control" [(ngModel)]="MotorLoadDto.FrequencyDipUnitsID" name="FrequencyDipUnits" required #FrequencyDipUnits="ngModel" (change)="MapFrequencyDipUnitsChange(MotorLoadDto.FrequencyDipUnitsID)">
+                            <option value="{{fDU.ID}}" *ngFor="let fDU of MotorLoadDto?.MotorLoadPickListDto?.FrequencyDipUnitsList">{{fDU.LanguageKey | translate}}</option>
+                        </select>
+                    </div>
+                </div>
+                <h4 class="text-primary" translate>motorLoad.LoadCharacteristics</h4>
+                <div class="form-group indent" *ngIf="MotorLoadDto.MotorLoadLevelEditable">
+                    <label translate>motorLoad.MotorLoadLevel</label>
+                    <select class="form-control" [(ngModel)]="MotorLoadDto.MotorLoadLevelID" name="MotorLoadLevel" required #MotorLoadLevel="ngModel" (change)="CalculateLoadCharacteristicsInputs()">
+                        <option value="{{ll.ID}}" *ngFor="let ll of MotorLoadDto?.MotorLoadPickListDto?.MotorLoadLevelList">{{ll.Description}}</option>
+                    </select>
+                </div>
+                <div class="form-group indent" *ngIf="MotorLoadDto.MotorLoadTypeEditable">
+                    <label translate>motorLoad.MotorLoadType</label>
+                    <select class="form-control" [(ngModel)]="MotorLoadDto.MotorLoadTypeID" name="MotorLoadType" required #MotorLoadType="ngModel" (change)="CalculateLoadCharacteristicsInputs()">
+                        <option value="{{ll.ID}}" *ngFor="let ll of MotorLoadDto?.MotorLoadPickListDto?.MotorLoadTypeList">{{ll.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <load-Characteristics [LoadCharacteristicsValues]="loadCharacteristicsValues">
+            </load-Characteristics>
+        </div>
+        <div class="col-sm-12 col-md-12">
+            <div class="actionbuttons text-right">
+                <button type="button" class="btn btn-default" (click)="CancelAddEditLoad()" translate>Cancel</button>
+                <button *ngIf="!readOnlyAccess" type="submit" class="btn btn-primary" translate>Save</button>
+            </div>
+        </div>
+        <div class="container">
+            <ngx-loading [show]="loading">
+            </ngx-loading>
+        </div>
+</form>

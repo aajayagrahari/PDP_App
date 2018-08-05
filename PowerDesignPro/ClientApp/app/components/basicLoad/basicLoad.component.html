@@ -1,0 +1,147 @@
+﻿<form #basicLoadForm="ngForm" (ngSubmit)="SaveLoadDetails(basicLoadForm.valid)" name="basicLoadForm">
+    <div class="col-sm-12 col-md-8">
+        <div class="col-sm-6">
+            <h4 class="text-primary" translate>basicLoad.LoadBasics</h4>
+            <div class="form-group indent">
+                <label translate>basicLoad.Description</label>
+                <input type="text" class="form-control required" name="Description" placeholder="{{'lightingload.Description' |translate}}" [(ngModel)]="BasicLoadDto.Description"
+                       required #Description="ngModel" />
+                <div *ngIf="(Description.invalid && (Description.dirty || Description.touched)) && Description?.errors.required || (basicLoadForm.submitted && Description.invalid)"
+                     class="alert alert-danger" translate>
+                    basicLoad.DescriptionAlert
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>basicLoad.Quantity</label>
+                <input type="text" OnlyNumeric="true" pattern="^0*[1-9]\d*$" class="form-control" name="Quantity" placeholder="{{'lightingload.Quantity' |translate}}" [(ngModel)]="BasicLoadDto.Quantity"
+                       required #Quantity="ngModel" (keyup)="CalculateLoadCharacteristicsInputs()" />
+                <div *ngIf="(Quantity.invalid && (Quantity.dirty || Quantity.touched)) && Quantity?.errors.required || (basicLoadForm.submitted && Quantity.invalid)"
+                     class="alert alert-danger" translate>
+                    basicLoad.QuantityAlert
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>basicLoad.Sequence</label>
+                <select class="form-control" [(ngModel)]="BasicLoadDto.SequenceID" name="Sequence" required #Sequence="ngModel">
+                    <option value="{{seq.ID}}" *ngFor="let seq of BasicLoadDto?.BasicLoadPickListDto?.SequenceList">{{seq.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent" *ngIf="BasicLoadDto.SizeRunningEditable">
+                <label translate>basicLoad.SizeRunning</label>
+                <div class="form-inline">
+                    <input type="text" OnlyNumeric="true" pattern="^[1-9][0-9]*(\.[0-9]+)?|\.[0-9]*[1-9][0-9]*$" required class="form-control" name="SizeRunning" placeholder="Size Running" [(ngModel)]="BasicLoadDto.SizeRunning"
+                           #SizeRunning="ngModel" (keyup)="CalculateLoadCharacteristicsInputs()"/>
+                    <select class="form-control" [(ngModel)]="BasicLoadDto.SizeRunningUnitsID" name="SizeRunningUnit" required #SizeRunningUnit="ngModel" (change)="MapSizeUnitChange(BasicLoadDto.SizeRunning, 'running')">
+                        <option value="{{size.ID}}" *ngFor="let size of BasicLoadDto?.BasicLoadPickListDto?.SizeUnitsList">{{size.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+                <div *ngIf="(SizeRunning.invalid && (SizeRunning.dirty || SizeRunning.touched)) && SizeRunning?.errors.required || (basicLoadForm.submitted && SizeRunning.invalid)"
+                     class="alert alert-danger" translate>
+                    basicLoad.SizeRunningAlert
+                </div>
+
+
+            </div>
+            <div class="form-group indent" *ngIf="BasicLoadDto.SizeStartingEditable">
+                <label translate>basicLoad.SizeStarting</label>
+                <div class="form-inline">
+                    <input type="text" OnlyNumeric="true" pattern="^[1-9][0-9]*(\.[0-9]+)?|\.[0-9]*[1-9][0-9]*$" class="form-control" name="SizeStarting" placeholder="Size Starting" [(ngModel)]="BasicLoadDto.SizeStarting"
+                           required #SizeStarting="ngModel" (keyup)="CalculateLoadCharacteristicsInputs()"/>
+                    <select class="form-control" [(ngModel)]="BasicLoadDto.SizeStartingUnitsID" name="SizeStartingUnit" required #SizeStartingUnit="ngModel" (change)="MapSizeUnitChange(BasicLoadDto.SizeStarting, 'starting')">
+                        <option value="{{size.ID}}" *ngFor="let size of BasicLoadDto?.BasicLoadPickListDto?.SizeUnitsList">{{size.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+                <div *ngIf="(SizeStarting.invalid && (SizeStarting.dirty || SizeStarting.touched)) && SizeStarting?.errors.required || (basicLoadForm.submitted && SizeStarting.invalid)"
+                     class="alert alert-danger" translate>
+                    basicLoad.SizeStartingAlert
+                </div>
+            </div>
+            <h4 class="text-primary" *ngIf="BasicLoadDto.HarmonicTypeEditable" translate>basicLoad.HarmonicTypeCharacteristics</h4>
+            <div class="form-group indent" *ngIf="BasicLoadDto.HarmonicTypeEditable">
+                <label translate>basicLoad.DeviceType</label>
+                <select class="form-control" [(ngModel)]="BasicLoadDto.HarmonicDeviceTypeID" name="HarmonicDeviceType" required #HarmonicDeviceType="ngModel"
+                        (change)="MapHarmonicDeviceTypeChange(BasicLoadDto.HarmonicDeviceTypeID)">
+                    <option value="{{dt.ID}}" *ngFor="let dt of BasicLoadDto?.BasicLoadPickListDto?.HarmonicDeviceTypeList">{{dt.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent" *ngIf="BasicLoadDto.HarmonicTypeEditable">
+                <label translate>basicLoad.HarmonicContent</label>
+                <select class="form-control" [(ngModel)]="BasicLoadDto.HarmonicContentID" name="HarmonicContent" required #HarmonicContentType="ngModel"
+                        (change)="CalculateHarmonicDistortionInputs()">
+                    <option value="{{hct.ID}}" *ngFor="let hct of BasicLoadDto?.BasicLoadPickListDto?.HarmonicContentList">{{hct.Description}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <h4 class="text-primary" translate>basicLoad.DeviceInformation</h4>
+            <div class="form-group indent">
+                <label translate>basicLoad.VoltagePhase</label>
+                <select class="form-control" [(ngModel)]="BasicLoadDto.VoltagePhaseID" name="VoltagePhase" required #VoltagePhase="ngModel" (change)="MapVoltageNominal(BasicLoadDto.VoltagePhaseID, BasicLoadDto.FrequencyID)">
+                    <option value="{{phase.ID}}" *ngFor="let phase of BasicLoadDto?.BasicLoadPickListDto?.VoltagePhaseList">{{phase.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>basicLoad.VoltageNominal</label>
+                <select class="form-control" [(ngModel)]="BasicLoadDto.VoltageNominalID" name="VoltageNominal" required #VoltageNominal="ngModel" (change)="MapVoltageSpecific(BasicLoadDto.VoltageNominalID)">
+                    <option value="{{voltage.ID}}" *ngFor="let voltage of BasicLoadDto?.BasicLoadPickListDto?.VoltageNominalList">{{voltage.Description}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>basicLoad.VoltageSpecific</label>
+                <select class="form-control" [(ngModel)]="BasicLoadDto.VoltageSpecificID" name="VoltageSpecific" required #VoltageSpecific="ngModel" (change)="MapVoltageSpecificChange(BasicLoadDto.VoltageDipUnitsID)">
+                    <option value="{{voltage.ID}}" *ngFor="let voltage of BasicLoadDto?.BasicLoadPickListDto?.VoltageSpecificList">{{voltage.Description}}</option>
+                </select>
+            </div>
+            <div class="form-group indent" *ngIf="BasicLoadDto.RunningPFEditable">
+                <label translate>basicLoad.RunningPF</label>
+                <select class="form-control" [(ngModel)]="BasicLoadDto.RunningPFID" name="RunningPF" required #RunningPF="ngModel" (change)="CalculateLoadCharacteristicsInputs()">
+                    <option value="{{pf.ID}}" *ngFor="let pf of BasicLoadDto?.BasicLoadPickListDto?.PFList">{{pf.Description}}</option>
+                </select>
+            </div>
+            <div class="form-group indent" *ngIf="BasicLoadDto.StartingPFEditable">
+                <label translate>basicLoad.StartingPF</label>
+                <select class="form-control" [(ngModel)]="BasicLoadDto.StartingPFID" name="StartingPF" required #StartingPF="ngModel" (change)="CalculateLoadCharacteristicsInputs">
+                    <option value="{{pf.ID}}" *ngFor="let pf of BasicLoadDto?.BasicLoadPickListDto?.PFList">{{pf.Description}}</option>
+                </select>
+            </div>
+            <h4 class="text-primary" translate>basicLoad.MaximumAllowableTransients</h4>
+            <div class="form-group indent">
+                <label translate>basicLoad.VoltageDip</label>
+                <div class="form-inline">
+                    <select class="form-control" [(ngModel)]="BasicLoadDto.VoltageDipID" name="VoltageDip" required #VoltageDip="ngModel">
+                        <option value="{{vDip.ID}}" *ngFor="let vDip of BasicLoadDto?.BasicLoadPickListDto?.VoltageDipList">{{vDip.Description}}</option>
+                    </select>
+                    <select class="form-control" [(ngModel)]="BasicLoadDto.VoltageDipUnitsID" name="VoltageDipUnits" required #VoltageDipUnits="ngModel" (change)="MapVoltageDipUnitsChange(BasicLoadDto.VoltageDipUnitsID)">
+                        <option value="{{vDU.ID}}" *ngFor="let vDU of BasicLoadDto?.BasicLoadPickListDto?.VoltageDipUnitsList">{{vDU.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>basicLoad.FrequencyDip</label>
+                <div class="form-inline">
+                    <select class="form-control" [(ngModel)]="BasicLoadDto.FrequencyDipID" name="FrequencyDip" required #FrequencyDip="ngModel">
+                        <option value="{{fDip.ID}}" *ngFor="let fDip of BasicLoadDto?.BasicLoadPickListDto?.FrequencyDipList">{{fDip.Description}}</option>
+                    </select>
+                    <select class="form-control" [(ngModel)]="BasicLoadDto.FrequencyDipUnitsID" name="FrequencyDipUnits" required #FrequencyDipUnits="ngModel" (change)="MapFrequencyDipUnitsChange(BasicLoadDto.FrequencyDipUnitsID)">
+                        <option value="{{fDU.ID}}" *ngFor="let fDU of BasicLoadDto?.BasicLoadPickListDto?.FrequencyDipUnitsList">{{fDU.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <load-Characteristics [LoadCharacteristicsValues]="loadCharacteristicsValues">
+        </load-Characteristics>
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <div class="actionbuttons text-right">
+            <button type="button" class="btn btn-default" (click)="CancelAddEditLoad()" translate>Cancel</button>            
+            <button *ngIf="!readOnlyAccess" type="submit" class="btn btn-primary" translate>Save</button>
+        </div>
+    </div>
+    <div class="container">
+        <ngx-loading [show]="loading">
+        </ngx-loading>
+    </div>
+</form>

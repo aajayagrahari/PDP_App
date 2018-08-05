@@ -1,0 +1,134 @@
+﻿<app-modal [hidden]="!showModal" #verifiedAddressModal>
+    <div class="app-modal-header">
+        <h4 class="modal-title" translate>addressValidation.VerifyAddress</h4>
+    </div>
+    <div class="app-modal-body">
+        <div>
+            <div>
+                <div style="font-weight: bold" translate>
+                    addressValidation.Pleaseconfirmyouraddress
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3">
+                    <label style="padding-bottom:4px;" translate>addressValidation.Youprovidedthisaddress</label>
+                </div>
+                <div class="col-md-5">
+                    <label class="modalLabel">{{inputAddress?.Address1}}</label>
+                    <label class="modalLabel">{{inputAddress?.Address2}}</label>
+                    <br />
+                    <label class="modalLabel">{{inputAddress?.City}}</label>,&nbsp;
+                    <label class="modalLabel">{{inputAddress?.State}}</label>&nbsp;<label class="modalLabel">{{inputAddress?.PostalCode}}</label>&nbsp;<label class="modalLabel">{{inputAddress?.CountryCode}}</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="radio" [(ngModel)]="selectedAddressOption" name="AddressConfirm" value="entered" />&nbsp;Use this address
+                </div>
+            </div>
+            <div>
+                <hr />
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label style="padding-bottom:4px;" translate>addressValidation.ReviewAlternatives</label><br />
+                    <span class="small" style="padding-bottom:4px;">(yellow indicates differences from entered.)</span>
+                </div>
+                <div class="col-md-5" *ngFor="let suggestedAddress of QASResponse?.SuggestionList">
+                    <label class="modalLabel" style="background-color:yellow;">{{suggestedAddress?.BusinessName}}</label>
+                    <label class="modalLabel" [ngStyle]="getAddressLabelColor('address1')">{{suggestedAddress?.Address1}}</label>
+                    <label class="modalLabel" [ngStyle]="getAddressLabelColor('address2')">{{suggestedAddress?.Address2}}</label>
+                    <br />
+                    <label class="modalLabel" [ngStyle]="getAddressLabelColor('city')">{{suggestedAddress?.City}}</label>,&nbsp;
+                    <label class="modalLabel" [ngStyle]="getAddressLabelColor('state')">{{suggestedAddress?.State}}</label>&nbsp;<label class="modalLabel" [ngStyle]="getAddressLabelColor('zipCode')">{{suggestedAddress?.PostalCode}}</label>&nbsp;<label class="modalLabel">{{suggestedAddress?.CountryCode}}</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="radio" [(ngModel)]="selectedAddressOption" name="AddressConfirm" value="recommended" checked="checked" />&nbsp;Use this address
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <button type="button" class="btn btn-default" (click)="verifiedAddressModal.hide()" translate>Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="modifyAddress()" translate>Submit</button>
+    </div>
+</app-modal>
+
+<app-modal [hidden]="!showModal" #picklistAddressModal>
+    <div class="app-modal-header">
+        <h4 class="modal-title" translate>addressValidation.VerifyAddress</h4>
+    </div>
+    <div class="app-modal-body">
+        <div>
+            <div class="row" style="padding-bottom:4px;">
+                <div class="col-md-8" style="padding-bottom:4px;">
+                    <div style="border: solid 1px #ffffff; padding-left: 2px; margin: 5px; background-color: #ffffcc" align="left">
+                        <label>{{QASResponse?.Remarks}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4" style="border-left: solid 1px #c0c0c0; padding-left: 15px; padding-top: 5px;">
+                    <label style="font-weight:bold;" translate>addressValidation.EnteredAddress</label>
+                    <br />
+                    <label class="modalLabel">{{inputAddress?.Address1}}</label>
+                    <label class="modalLabel">{{inputAddress?.Address2}}</label>
+                    <br />
+                    <label class="modalLabel">{{inputAddress?.City}}</label>,&nbsp;
+                    <label class="modalLabel">{{inputAddress?.State}}</label><br />
+                    <label class="modalLabel">{{inputAddress?.PostalCode}}</label>&nbsp;
+                    <label class="modalLabel">{{inputAddress?.CountryCode}}</label>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <fieldset id="pnlAddressmatches" runat="server" visible="false">
+                        <legend style="font-weight:bold; text-align:left;padding-left:4px;" translate>addressValidation.Addressmatches</legend>
+                        <div class="pick-list">
+                            <a *ngFor="let suggestedAddress of QASResponse?.SuggestionList" (click)="updateAddressFromPicklist(suggestedAddress)">
+                                {{suggestedAddress?.Address1}},&nbsp;{{suggestedAddress?.Address2}},&nbsp;{{suggestedAddress?.City}}&nbsp;{{suggestedAddress?.State}}<br />
+                            </a>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer" style="text-align:center;">
+        <button type="button" class="btn btn-default" (click)="useNotVerifiedPicklistAddress()" translate>Cancel</button>
+    </div>
+</app-modal>
+
+<app-modal [hidden]="!showModal" #notVerifiedAddressModal>
+    <div class="app-modal-header">
+        <h4 class="modal-title" translate>addressValidation.Cannotverifyaddress</h4>
+    </div>
+    <div class="app-modal-body">
+        <div>
+            <div>
+                <div>
+                    <br />
+                    <div>
+                        <label class="modalLabel">{{inputAddress?.Address1}}</label>
+                        <label class="modalLabel">{{inputAddress?.Address2}}</label>
+                        <br />
+                        <label class="modalLabel">{{inputAddress?.City}}</label>,&nbsp;
+                        <label class="modalLabel">{{inputAddress?.State}}</label>&nbsp;<label class="modalLabel">{{inputAddress?.PostalCode}}</label>
+                        <br />
+                        <label class="modalLabel">{{inputAddress?.CountryCode}}</label>
+                    </div>
+                    <br />
+                </div>
+            </div>
+            <div style="text-align: center">
+                <label style="font-weight:bold;" translate>addressValidation.NotFound</label>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <button type="button" class="btn btn-primary" (click)="useNotVerifiedAddress()" translate>Accept</button>
+        <button type="button" class="btn btn-primary" (click)="notVerifiedAddressModal.hide()" translate>Change</button>
+    </div>
+</app-modal>
+
+<div class="container">
+    <ngx-loading [show]="loading">
+    </ngx-loading>
+</div>

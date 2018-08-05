@@ -1,0 +1,111 @@
+﻿<div>
+    <h3 translate>loadCharacteristics.LoadCharacteristics</h3>
+</div>
+<div class="panel panel-default">
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th colspan="2" class="text-center" translate>loadCharacteristics.StartingLoad</th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-sm-6 text-muted">sKVA</div>
+                    <div class="col-sm-6 text-right">{{LoadCharacteristicsValues?.sKVA}}</div>
+                </td>
+                <td>
+                    <div class="col-sm-6 text-muted">sKW</div>
+                    <div class="col-sm-6 text-right">{{LoadCharacteristicsValues?.sKW}}</div>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2" class="text-center" translate>loadCharacteristics.RunningLoad</th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-sm-6 text-muted">rKVA</div>
+                    <div class="col-sm-6 text-right">{{LoadCharacteristicsValues?.rKVA}}</div>
+                </td>
+                <td>
+                    <div class="col-sm-6 text-muted">rKW</div>
+                    <div class="col-sm-6 text-right">{{LoadCharacteristicsValues?.rKW}}</div>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2" class="text-center" translate>{{'loadCharacteristics.HarmonicCurrentDistortion' | translate}} (%)</th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-sm-6 text-muted" translate>loadCharacteristics.Momentary</div>
+                    <div class="col-sm-6 text-right">{{LoadCharacteristicsValues?.momentaryHarmonicCurrentDistortion}}</div>
+                </td>
+                <td>
+                    <div class="col-sm-6 text-muted" translate>loadCharacteristics.Continuous</div>
+                    <div class="col-sm-6 text-right">{{LoadCharacteristicsValues?.continuousHarmonicCurrentDistortion}}</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="panel panel-default">
+    <table class="table">
+        <tbody>
+            <tr>
+                <th class="text-center" translate>loadCharacteristics.HarmonicCurrentDistortion</th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-sm-3 col-sm-offset-3 text-muted">3rd</div>
+                    <div class="col-sm-3 text-right">{{LoadCharacteristicsValues?.harmonicCurrentDistortion?.HD3}}</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-sm-3 col-sm-offset-3 text-muted">5th</div>
+                    <div class="col-sm-3 text-right">{{LoadCharacteristicsValues?.harmonicCurrentDistortion?.HD5}}</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-sm-3 col-sm-offset-3 text-muted">7th</div>
+                    <div class="col-sm-3 text-right">{{LoadCharacteristicsValues?.harmonicCurrentDistortion?.HD7}}</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-sm-3 col-sm-offset-3 text-muted">9th</div>
+                    <div class="col-sm-3 text-right">{{LoadCharacteristicsValues?.harmonicCurrentDistortion?.HD9}}</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-sm-3 col-sm-offset-3 text-muted">11th</div>
+                    <div class="col-sm-3 text-right">{{LoadCharacteristicsValues?.harmonicCurrentDistortion?.HD11}}</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-sm-3 col-sm-offset-3 text-muted">13th</div>
+                    <div class="col-sm-3 text-right">{{LoadCharacteristicsValues?.harmonicCurrentDistortion?.HD13}}</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-sm-3 col-sm-offset-3 text-muted">15th</div>
+                    <div class="col-sm-3 text-right">{{LoadCharacteristicsValues?.harmonicCurrentDistortion?.HD15}}</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-sm-3 col-sm-offset-3 text-muted">17th</div>
+                    <div class="col-sm-3 text-right">{{LoadCharacteristicsValues?.harmonicCurrentDistortion?.HD17}}</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-sm-3 col-sm-offset-3 text-muted">19th</div>
+                    <div class="col-sm-3 text-right">{{LoadCharacteristicsValues?.harmonicCurrentDistortion?.HD19}}</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,165 @@
+﻿
+<section class="content_dashboard">
+    <div class="jumbotron">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a routerLink="/home" translate>exhaustPiping.Home</a></li>
+                <li><a [routerLink]="['/project', projectID]">{{projectDetails?.ProjectName}}</a></li>
+                <li><a [routerLink]="['/project', projectID, 'solution', solutionID]">{{solutionDetail?.SolutionName}}</a></li>
+                <li class="active" translate>exhaustPiping.ExhaustPiping</li>
+            </ol>
+            <pdpprojectheader [(projectDetails)]="projectDetails" (updatedProjectDetails)="updatedProjectDetails($event)"></pdpprojectheader>
+        </div>
+    </div>
+
+    <pdpsolutionheader [(solutionDetail)]="solutionDetail" *ngIf="solutionDetail"></pdpsolutionheader>
+
+    <div class="container body-content indent">
+        <div *ngIf="ExhaustPipingReport">
+            <div>
+                <a class="navbar-brand">
+                    <div class="img-brand"></div>
+                    <div>
+                        Power Design Pro<sup class="small">TM</sup>
+                    </div>
+                </a>
+            </div>
+            <br />
+            <br /
+            <hr />
+            <h3 class="indent" translate>exhaustPiping.ExhaustPiping</h3>
+            <br />
+            <div class="row indent">
+                <div class="col-md-6 indent">
+                    <div class="panel panel-default">                        
+                        <table class="table table-condensed">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="col-sm-12 text-center"><h4 translate>GeneratorSummary</h4></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted" translate>exhaustPiping.SizingMethod</div>
+                                        <div class="col-xs-7 text-left">{{ExhaustPipingReport.SizingMethod}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted" translate>exhaustPiping.PipeSize</div>
+                                        <div class="col-xs-7 text-left">{{ExhaustPipingReport.PipeSize}} {{ExhaustPipingReport.PipeSizeUnitText}}</div>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted" translate>exhaustPiping.ExhaustEngineConfiguration:</div>
+                                        <div class="col-xs-7 text-left">{{ExhaustPipingReport.ExhaustEngineConfiguration}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted" translate>exhaustPiping.ExhaustSystem Configuration:</div>
+                                        <div class="col-xs-7 text-left">{{ExhaustPipingReport.ExhaustSystemConfiguration}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted" translate>exhaustPiping.ProductFamily</div>
+                                        <div class="col-xs-7 text-left">{{ExhaustPipingReport.ProductFamilyDesc}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted" translate>xhaustPiping.Generator</div>
+                                        <div class="col-xs-7 text-left">{{ExhaustPipingReport.ModelDescription}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted" translate>exhaustPiping.TotalExhaustFlow</div>
+                                        <div class="col-xs-7 text-left">{{ExhaustPipingReport.TotalExhaustFlow}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted" translate>exhaustPiping.MaximumBackPressure ({{ExhaustPipingReport.PressureUnitText}})</div>
+                                        <div class="col-xs-7 text-left">{{ExhaustPipingReport.MaximumBackPressure}}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-6 indent">
+                    <div class="panel panel-default">                        
+                        <table class="table table-condensed">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="col-sm-12 text-center"><h4 translate>exhaustPiping.Solution</h4></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted" translate>exhaustPiping.PressureDrop ({{ExhaustPipingReport.PressureUnitText}})</div>
+                                        <div class="col-xs-7 text-left">{{ExhaustPipingReport.PressureDrop}}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row indent">
+                <div class="col-md-6 indent">
+                    <div class="panel panel-default">
+                        <table class="table table-condensed">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="col-sm-12 text-center"><h4>exhaustPiping.Inputs</h4></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">exhaustPiping.LengthofRun ({{ExhaustPipingReport.LengthOfRunUnitText}})</div>
+                                        <div class="col-xs-7 text-left">{{ExhaustPipingReport.LengthOfRun}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted" translate>exhaustPiping.NumberofStandardElbows</div>
+                                        <div class="col-xs-7 text-left">{{ExhaustPipingReport.NumberOfStandardElbows}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted" translate>exhaustPiping.NumberofLongElbow: (radius > 1.5 dia)</div>
+                                        <div class="col-xs-7 text-left">{{ExhaustPipingReport.NumberOfLongElbows}} %</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted" translate>exhaustPiping.Numberof45elbows</div>
+                                        <div class="col-xs-7 text-left">{{ExhaustPipingReport.NumberOf45Elbows}} %</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <label translate>* - Piping pressure drop calculation only. Verify installation is performed per code requirement.</label>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <ngx-loading [show]="loading">
+        </ngx-loading>
+    </div>
+</section>

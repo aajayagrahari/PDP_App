@@ -1,0 +1,24 @@
+﻿
+
+<section>
+    <div class="jumbotron">
+        <div class="container">
+            <h2 translate>confirmEmail.ConfirmEmail</h2>
+        </div>
+    </div>
+
+    <div class="container"> 
+        <div class="alert alert-success col-md-12" role="alert" *ngIf="!error && confirmEmailSuccess">
+            <p translate>
+                confirmEmail.thanks
+                <a href="/login" translate>confirmEmail.loginClick</a>
+            </p>
+        </div>
+
+        <div class="alert alert-danger col-md-12" role="alert" *ngIf="error && !confirmEmailSuccess">
+            <p class="text-danger" translate>
+                warning.InternalServerError
+            </p>
+        </div>
+    </div>
+</section>

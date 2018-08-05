@@ -1,0 +1,32 @@
+﻿{
+  "login": {
+    "EmailAddress": "Adresse e-mail",
+    "Password": "Mot de passe",
+    "NoAccountMessage": "Vous n'avez pas de compte?",
+    "Register": "registre",
+    "ForgotPassword": "Mot de passe oublié?"
+  },
+  "header": {
+    "Signout": "Déconnexion",
+    "AccountSettings": "Seetings de compte",
+    "UserDefaults": "Valeurs par défaut de l'utilisateur"
+  },
+  "dashboard": {
+    "MyDashboard": "Mon tableau de bord",
+    "Home": "Accueil",
+    "ProjectSaved": "Projet sauvegardé",
+    "ProjectShared": "Projet partagé avec succès.",
+    "NewProject": "Nouveau projet",
+    "Search": "Rechercher des projets",
+    "DisplayingAllProjects90Days": "Affichage de tous les projets mis à jour au cours des 90 derniers jours.",
+    "DisplaySharedProject": "Afficher tous les projets de partage avec moi",
+    "ProjectName": "nom du projet",
+    "Created": "Créé",
+    "Modified": "Modifié",
+    "ContactName": "Nom du contact",
+    "ContactEmail": "Email du contact"
+  },
+  "Save": "enregistrer",
+  "Close": "Fermer",
+  "SignIn": "Se connecter"
+}

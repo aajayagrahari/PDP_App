@@ -1,0 +1,41 @@
+<div class="panel panel-default panel-signin">
+    <div class="panel-heading">
+        <h1 class="panel-title">Power Design Pro<sup class="small">TM</sup> - Sign In</h1>
+    </div>
+    <div class="panel-body">
+        <form (ngSubmit)="onLogin()" id="loginform">
+            <div class="alert alert-danger alert-dismissible fade in" role="alert" *ngIf="loginmodel.accessdenined">
+                <button type="button" id="alerterror" class="close" (click)="HideAlert()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <p><strong translate>warning.InvalidUserMessage</strong>.  {{'warning.VerifyCredential'| translate}}</p>
+            </div>
+            <div class="form-group">
+                <label for="username" translate>login.EmailAddress</label>
+                <input type="text" class="form-control" name="username" [(ngModel)]="loginmodel.UserName">
+            </div>
+            <div class="form-group">
+                <label for="password" translate>login.Password</label>
+                <input type="password" class="form-control" name="password" [(ngModel)]="loginmodel.Password">
+            </div>
+            <!--<div class="checkbox">
+                <label>
+                    <input type="checkbox"> Remember me
+                </label>
+            </div>-->
+            <input type="submit" class="btn btn-primary" id="signin" [disabled]="loading" value="{{'SignIn' | translate}}" />
+            <br />
+            <br />
+            <div>
+                {{'login.NoAccountMessage'|translate}} <a id="register" routerLink="/register">{{'login.Register' | translate}}</a>
+            </div>
+            <div>
+                <a id="forgotPassword" routerLink="/forgotPassword">{{'login.ForgotPassword' | translate}}</a>
+            </div>
+        </form>
+        <div class="progress" *ngIf="loading">
+            <div class="progress-bar progress-bar-striped active" role="progressbar"
+                 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                Signing In...
+            </div>
+        </div>
+    </div>
+</div>

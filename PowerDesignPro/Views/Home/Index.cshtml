@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Home";
+}
+<script src="https://ajax.googleapis.com/ajax/libs/hammerjs/2.0.8/hammer.min.js"></script>
+<script src="https://unpkg.com/core-js/client/shim.min.js"></script>
+<script src="https://unpkg.com/systemjs@0.19.39/dist/system.src.js"></script>
+
+<app asp-ng2-prerender-module="ClientApp/dist/main-server">Loading...</app>
+
+
+
+<script src="~/dist/vendor.js" asp-append-version="true"></script>
+@section scripts {
+    <script src="~/dist/main-client.js" asp-append-version="true"></script>
+}
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="~/javascripts/bootstrap.min.js"></script>
+<script>
+    // Get the locale id somehow
+    document.locale = 'es';
+
+    // Map to the text plugin
+    System.config({
+        map: {
+            text: '~/javascripts/systemjs-text-plugin.js'
+        }
+    });
+
+      // Launch the app
+</script>

@@ -1,0 +1,75 @@
+<!---->
+<section class="content_dashboard">
+    <div class="jumbotron">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a routerLink="/home" translate>dashboard.Home</a></li>
+                <li class="active">{{projectDetails?.ProjectName}}</li>
+            </ol>
+            <pdpprojectheader [(projectDetails)]="projectDetails" (updatedProjectDetails)="updatedProjectDetails($event)"></pdpprojectheader>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- This success message will only be displayed for the tasks in Sprint 1 -->
+        <div class="alert alert-success alert-dismissible fade in hidden" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <p translate>warning.Solutionsaved</p>
+        </div>
+
+        <div class="row pdp_projectlistutilities" *ngIf="!projectDetails?.IsReadOnlyAccess">
+            <div class="col-sm-2">
+                <a class="btn btn-primary" [routerLink]="['/project', projectID, 'solutionsetup']" translate>
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> NewSolution
+                </a>
+            </div>
+        </div>
+
+        <section id="error" *ngIf="showError">
+            <p class="text-warning" translate>warning.Textwarning<a href="/logout" translate>warning.LoginAgain</a>.</p>
+        </section>
+
+        <div class="alert alert-success alert-dismissible fade in" role="alert" *ngIf="showNosolutionSection" translate>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <b translate>Welcome</b>: <span translate>warning.ShowNosolutionSection</span>
+        </div>
+
+        <section id="Results" *ngIf="!showNosolutionSection">
+            <table class="table table-condensed table-hover table-striped pdp_solutionlist">
+                <thead translate>
+                    <tr translate>
+                        <th translate>solutionSection.SolutionName</th>
+                        <th translate>solutionSection.SpecReference</th>
+                        <th translate>dashboard.Created</th>
+                        <th translate>dashboard.Modified</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let solution of solutionlist" (click)="DisplaySolution(solution.SolutionID)">
+                        <td>
+                            {{solution?.SolutionName}}
+                            <p>{{solution?.Description}}</p>
+                        </td>
+                        <td>{{solution?.SpecRefNumber}}</td>
+                        <td>{{solution?.CreatedDateTime | localizedDate}}</td>
+                        <td>{{solution?.ModifiedDateTime | localizedDate}}</td>
+                        <td class="text-right">
+                            <button type="button" *ngIf="!solution?.IsReadOnlyAccess" class="btn btn-default btn-xs" aria-label="Delete Project" (click)="deleteSolution($event, solution.SolutionID)">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+
+                </tfoot>
+            </table>
+        </section>
+        <div class="container">
+            <ngx-loading [show]="loading">
+            </ngx-loading>
+        </div>
+    </div>
+
+</section>

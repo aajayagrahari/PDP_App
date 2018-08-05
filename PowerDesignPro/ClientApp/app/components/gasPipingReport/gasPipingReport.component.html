@@ -1,0 +1,182 @@
+﻿
+<section class="content_dashboard">
+    <div class="jumbotron">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a routerLink="/home" translate>dashboard.Home</a></li>
+                <li><a [routerLink]="['/project', projectID]">{{projectDetails?.ProjectName}}</a></li>
+                <li><a [routerLink]="['/project', projectID, 'solution', solutionID]">{{solutionDetail?.SolutionName}}</a></li>
+                <li class="active" translate>gasPipingReport.GasPiping</li>
+            </ol>
+            <pdpprojectheader [(projectDetails)]="projectDetails" (updatedProjectDetails)="updatedProjectDetails($event)"></pdpprojectheader>
+        </div>
+    </div>
+
+    <pdpsolutionheader [(solutionDetail)]="solutionDetail" *ngIf="solutionDetail"></pdpsolutionheader>
+
+    <div class="container body-content indent">
+        <div *ngIf="GasPipingReport">
+            <div>
+                <a class="navbar-brand">
+                    <div class="img-brand"></div>
+                    <div>
+                        Power Design Pro<sup class="small">TM</sup>
+                    </div>
+                </a>
+            </div>
+            <br />
+            <br />
+            <hr />
+            <h3 class="indent" translate>gasPipingReport.GasPiping</h3>
+            <br />
+            <div class="row indent">
+                <div class="col-md-6 indent">
+                    <div class="panel panel-default">                        
+                        <table class="table table-condensed">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="col-sm-12 text-center"><h4 translate>gasPipingReport.GeneratorSummary</h4></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">{{'gasPipingReport.SizingMethod' | translate}}:</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.SizingMethod}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">{{'gasPipingReport.PipeSize'|translate}}:</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.PipeSize}} {{GasPipingReport.PipeSizeUnitText}}</div>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">{{'gasPipingReport.ProductFamily'  | translate}}:</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.ProductFamilyDesc}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">{{'gasPipingReport.Generator' | translate}}:</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.ModelDescription}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">{{'gasPipingReport.FuelType'|translate}}:</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.FuelType}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">{{'gasPipingReport.FuelConsumption' |translate}}: ({{'ThermsHour' |translate}})</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.FuelConsumption}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">{{'gasPipingReport.MinimumPressure' | translate}}: ({{GasPipingReport.PressureUnitText}})</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.GeneratorMinPressure}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-sm-12 text-center" translate>gasPipingReport.GasFlowPipeInfo</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-6 indent">
+                    <div class="panel panel-default">                        
+                        <table class="table table-condensed">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="col-sm-12 text-center"><h4 translate>gasPipingReport.Solution</h4></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">{{'gasPipingReport.PressureDrop' | translate}}: ({{GasPipingReport.PressureUnitText}})</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.PressureDrop}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">{{'gasPipingReport.AvailablePressure'|translate}}: ({{GasPipingReport.PressureUnitText}})</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.AvailablePressure}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted" translate>% {{'gasPipingReport.ofAllowable' | translate}}:</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.AllowablePercentage}} %</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row indent">
+                <div class="col-md-6 indent">
+                    <div class="panel panel-default">
+                        <table class="table table-condensed">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="col-sm-12 text-center"><h4 translate>gasPipingReport.Inputs</h4></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">{{'gasPipingReport.SupplyGasPressure' | translate}}: ({{GasPipingReport.PressureUnitText}})</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.SupplyGasPressure}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">{{'gasPipingReport.Lengthofrun' | translate}}: ({{GasPipingReport.LengthOfRunUnitText}})</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.LengthOfRun}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">{{'gasPipingReport.Numberof90elbows' | translate}}:</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.NumberOf90Elbows}} %</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">{{'gasPipingReport.Numberof45elbows' | translate}}:</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.NumberOf45Elbows}} %</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-xs-5 text-muted">{{'gasPipingReport.NumberofTees' | translate}}:</div>
+                                        <div class="col-xs-7 text-left">{{GasPipingReport.NumberOfTees}} %</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <label translate>* - {{'gasPipingReport.Pipingpressuredropcalculation' | translate}}.</label>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <ngx-loading [show]="loading">
+        </ngx-loading>
+    </div>
+</section>

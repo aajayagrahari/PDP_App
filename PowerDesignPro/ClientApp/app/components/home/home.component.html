@@ -1,0 +1,221 @@
+
+<section id="homeContent" class="content_dashboard">
+
+    <div class="jumbotron">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="active" translate>dashboard.Home</li>
+            </ol>
+            <h1 translate>dashboard.MyDashboard</h1>
+        </div>
+    </div>
+    <div class="container">
+        <!-- This success message will only be displayed for the tasks in Sprint 1 -->
+        <div class="alert alert-success alert-dismissible fade in" role="alert" *ngIf="showMessagebar">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <p translate>dashboard.ProjectSaved</p>
+        </div>
+        <div class="alert alert-success alert-dismissible fade in" role="alert" *ngIf="showShareProject">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <p translate>dashboard.ProjectShared</p>
+        </div>
+
+        <div class="row pdp_projectlistutilities">
+            <div class="col-sm-2">
+                <button id="newProject" class="btn btn-primary" data-toggle="modal" data-target="#myModal" translate>
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> dashboard.NewProject
+                </button>
+            </div>
+            <div class="col-sm-8">
+                <!--<form id="formsearch" (keyup)="getprojectbyname()">-->
+                <form id="formsearch">
+                    <div class="input-group" (keyup)="getprojectbyname(currentFilter)" *ngIf="SearchbyProject">
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></div>
+                        <input type="text" name="txtsearch" class="form-control" placeholder="{{'dashboard.Search' | translate}}" [(ngModel)]="searchProject.ProjectName">
+                    </div>
+                    <div class="input-group" *ngIf="SearchbyDate">
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></div>
+                        <my-date-picker name="mydate"  class="form-control" [options]="myDatePickerOptions" placeholder="{{'dashboard.Search' | translate}}" [(ngModel)]="searchProject.ProjectName" (dateChanged)="onDateChanged($event)" required></my-date-picker>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-2">
+                <select class="form-control" [(ngModel)]="currentFilter" (ngModelChange)="onSelectFilter($event)" name="searchBy">
+                    <option value="{{searchFilter.ID}}" *ngFor="let searchFilter of searchFilters">{{searchFilter.LanguageKey | translate}}</option>
+                </select>
+            </div>
+        </div>
+
+        <section id="NoResults" *ngIf="shownodataSearch">
+            <p class="pdp_searchparameters text-warning" translate>warning.ProjectSearch<a href="/home" translate>warning.ResetDashboardView</a>.</p>
+        </section>
+
+        <section id="error" *ngIf="showError">
+            <p class="text-warning">Some error has occured. Please contact administrator or <a href="/logout">login again</a>.</p>
+        </section>
+
+        <div class="alert alert-success alert-dismissible fade in" role="alert" *ngIf="showWelcomeMessage">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <b translate>Welcome</b>: <span translate>warning.ShowNoProjectSection</span>
+        </div>
+
+        <section id="Results" *ngIf="showGrid">
+            <p class="pdp_searchparameters text-info" translate>dashboard.DisplayingAllProjects90Days</p>
+            <table class="table table-condensed table-hover table-striped pdp_projectlist">
+                <thead>
+                    <tr>
+                        <th width="40%" translate>dashboard.ProjectName</th>
+                        <th width="20%" translate>dashboard.Created</th>
+                        <th width="20%" translate>dashboard.Modified</th>
+                        <th width="17%"></th>
+                        <th width="3%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let project of listofProjects | paginate : {id: 'projectpagination', itemsPerPage: 10, currentPage : p}" (click)="Displayproject(project.ID)">
+                        <td>{{project.ProjectName}}</td>
+                        <td>{{project.CreatedDateTime | localizedDate}}</td>
+                        <td>{{project.ModifiedDateTime | localizedDate}}</td>
+                        <td class="text-right"><button type="button" id="shareProject" class="btn btn-default btn-xs" title="{{'ShareProject' | translate}}" aria-label="Share Project" (click)="openModel($event, project.ID)"><span class="glyphicon glyphicon-share" aria-hidden="true"></span></button></td>
+                        <td class="text-right"><button type="button" id="deleteProject" class="btn btn-default btn-xs" title="{{'DeleteProject' | translate}}" aria-label="Delete Project" (click)="deleteProject($event, project.ID)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+                    </tr>
+                </tbody>
+
+                <tfoot *ngIf="listofProjects.length > 10">
+                    <tr>
+                        <td colspan="5">
+                            <pagination-controls autoHide="true" id="projectpagination" (pageChange)="p =$event"></pagination-controls>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+
+
+        <section id="Results" *ngIf="showShareProjectdata">
+            <p class="pdp_searchparameters text-info" translate>dashboard.DisplaySharedProject</p>
+            <table class="table table-condensed table-hover table-striped pdp_projectlist">
+                <thead>
+                    <tr>
+                        <th width="40%" translate>dashboard.ProjectName</th>
+                        <th width="20%" translate>dashboard.Created</th>
+                        <th width="20%" translate>dashboard.Modified</th>
+                        <th width="17%" translate>dashboard.SharedUser</th>
+                        <th width="3%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let project of listofShareProjects | paginate : {id: 'shareprojectpagination',itemsPerPage: 10, currentPage : sp}" (click)="Displayproject(project.ID)">
+                        <td>{{project.ProjectName}}</td>
+                        <td>{{project.CreatedDateTime | localizedDate }}</td>
+                        <td>{{project.ModifiedDateTime | localizedDate}}</td>
+                        <td>{{project.SharedUser}}</td>
+                        <td class="text-right"><button type="button" id="deleteShareProject" class="btn btn-default btn-xs" title="{{'DeleteProjectShare' | translate}}" aria-label="Delete Shared Project" (click)="deleteShareProject($event, project.ID)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+                    </tr>
+                </tbody>
+                <tfoot *ngIf="listofShareProjects.length > 10">
+                    <tr>
+                        <td colspan="4">
+                            <pagination-controls autoHide="true" id="shareprojectpagination" (pageChange)="sp =$event"></pagination-controls>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+    </div>
+
+    <div class="container">
+        <ngx-loading [show]="loading">
+        </ngx-loading>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel" translate>dashboard.NewProject</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger alert-dismissible fade in" *ngIf="showadderror" role="alert">
+                        <button type="button" class="close" (click)="HideAlert()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <p *ngIf="showProjectNameRequiredError" translate><strong translate>dashboard.ProjectName</strong> warning.ShowRequiredError <strong translate>dashboard.ProjectName</strong></p>
+                        <p *ngIf="showUniqueProjectNameError" translate><strong translate>dashboard.ProjectName</strong> warning.ShowUniqueProjectNameError <strong translate>dashboard.ProjectName</strong></p>
+                    </div>
+                    <div class="form-group">
+                        <label translate>dashboard.ProjectName</label>
+                        <input type="text" [maxlength]="maxLength" class="form-control required" required name="projectname" [(ngModel)]="addedProject.projectName">
+                    </div>
+                    <div class="form-group">
+                        <label translate>dashboard.ContactName</label>
+                        <input type="text" [maxlength]="maxLength" class="form-control" name="contactname" [(ngModel)]="addedProject.contactName">
+                    </div>
+                    <div class="form-group">
+                        <label translate>dashboard.ContactEmail</label>
+                        <input type="email" [maxlength]="maxLength" class="form-control" name="contactemail" [(ngModel)]="addedProject.contactEmail">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" #closemodal class="btn btn-default" data-dismiss="modal" translate>Close</button>
+                    <button type="button" class="btn btn-primary" (click)="AddProject()" translate>Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Share Project-->
+    <div class="backdrop" [ngStyle]="{'display': visible ? 'block' : 'none', 'opacity': visibleAnimate ? 1 : 0}"></div>
+    <div class="modal fade" tabindex="-1" role="dialog" [ngClass]="{'in': visibleAnimate}"
+         [ngStyle]="{'display': visible ? 'block' : 'none', 'opacity': visibleAnimate ? 1 : 0}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="onCloseHandled()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel" translate>shareProjectSection.ShareProject</h4>
+                </div>
+                <div class="modal-body share-project">
+                    <div class="alert alert-danger alert-dismissible fade in" *ngIf="showemailerror" role="alert">
+                        <button type="button" class="close" (click)="HideError()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <p *ngIf="showReceiptEmailError" translate><strong translate>shareProjectSection.Recipientemail</strong> warning.ShowError</p>
+                    </div>
+                    <div class="form-group">
+                        <label translate>shareProjectSection.Recipientemail</label>
+                        <input type="text" class="form-control required" required name="recipientemail" [(ngModel)]="shareProject.RecipientEmail">
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="text-primary" translate>shareProjectSection.Solutions</h4>
+                        </div>
+                        <div class="panel-body solution-list">
+                            <div class="form-group" *ngFor="let solution of ProjectSolutionList">
+                                <div class="col-md-1">
+                                    <input type="checkbox" [(ngModel)]="solution.Selected" />
+                                </div>
+                                <span class="text-muted"><b>{{solution.Name}}</b></span>
+                                <p>
+                                    <label translate>shareProjectSection.Description</label> : <span class="text-muted">{{solution.Description}}</span>
+                                </p>
+                                <hr />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger alert-dismissible fade in" *ngIf="showSolutionError" role="alert">
+                        <button type="button" class="close" (click)="HideAlert()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <p translate>warning.SolutionSelectionError <b translate>shareProjectSection.Solution</b></p>
+                    </div>
+                    <div class="form-group">
+                        <label translate>shareProjectSection.Notes</label>
+                        <textarea class="form-control" rows="3" [(ngModel)]="shareProject.Notes" name="Description"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" #closemodal class="btn btn-default" (click)="onCloseHandled()" translate>Close</button>
+                    <button type="button" class="btn btn-primary" (click)="ShareProject()" translate>shareProjectSection.ShareProject</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>

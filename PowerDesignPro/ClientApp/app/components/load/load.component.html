@@ -1,0 +1,50 @@
+
+<section class="content_dashboard" *ngIf="BaseLoad">
+
+    <div class="jumbotron">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a routerLink="/home" translate>Home</a></li>
+                <li><a [routerLink]="['/project', projectID]">{{projectDetails?.ProjectName}}</a></li>
+                <li><a [routerLink]="['/project', projectID, 'solution', solutionID]">{{BaseLoad.SolutionName}}</a></li>
+                <li class="active" translate>Load</li>
+            </ol>
+            <pdpprojectheader [(projectDetails)]="projectDetails"  (updatedProjectDetails)="updatedProjectDetails($event)"></pdpprojectheader>
+        </div>
+    </div>
+
+    <pdpsolutionheader [(solutionDetail)]="solutionDetail" *ngIf="solutionDetail"></pdpsolutionheader>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-sm-2"><h2 translate>Load</h2></div>
+                    <div class="col-sm-4" style="padding-top: 15px;">
+                        <div class="form-group">
+                            <select class="form-control" [(ngModel)]="SelectedLoad" (ngModelChange)="ShowLoadDetaill(SelectedLoad)" [disabled]="loadId">
+                                <option [ngValue]="load" *ngFor="let load of LoadList">{{load.LanguageKey | translate}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!--<fieldset [disabled]="isReadOnlyAccess">-->
+            <basic-load #basicLoad *ngIf="loadFamily == 'basic'" [selectedLoad]="SelectedLoad" [readOnlyAccess]="isReadOnlyAccess">
+            </basic-load>
+            <ac-load #acLoad *ngIf="loadFamily == 'ac'" [selectedLoad]="SelectedLoad" [readOnlyAccess]="isReadOnlyAccess">
+            </ac-load>
+            <lighting-load #lightingLoad *ngIf="loadFamily == 'lighting'" [selectedLoad]="SelectedLoad" [readOnlyAccess]="isReadOnlyAccess">
+            </lighting-load>
+            <welder-load #welderLoad *ngIf="loadFamily == 'welder'" [selectedLoad]="SelectedLoad" [readOnlyAccess]="isReadOnlyAccess">
+            </welder-load>
+            <ups-load #upsLoad *ngIf="loadFamily == 'ups'" [selectedLoad]="SelectedLoad" [readOnlyAccess]="isReadOnlyAccess">
+            </ups-load>
+            <motor-load #motorLoad *ngIf="loadFamily == 'motor'" [selectedLoad]="SelectedLoad" [readOnlyAccess]="isReadOnlyAccess">
+            </motor-load>
+            <!--</fieldset>-->
+        </div>
+    </div>
+</section>

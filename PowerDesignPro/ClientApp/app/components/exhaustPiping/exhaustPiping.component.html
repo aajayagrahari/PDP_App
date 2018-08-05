@@ -1,0 +1,123 @@
+﻿<fieldset [disabled]="readOnlyAccess">
+    <div *ngIf="ExhaustPiping">
+        <h3 translate>GeneratorSummary</h3>
+        <div class="panel panel-default">
+            <table class="table table-condensed">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="col-xs-5 text-muted" translate>exhaustPiping.ProductFamily</div>
+                            <div class="col-xs-7 text-left">{{ExhaustPiping.ExhaustPipingGeneratorSummary?.ProductFamily | translate}}</div>
+                        </td>
+                        <td>
+                            <div class="col-xs-8 text-muted" translate>{{'exhaustPiping.TotalExhaustFlow'| translate}} ({{ExhaustPiping.UnitMeasure?.FeetOrMeters}}<sup>3</sup> / Min)</div>
+                            <div class="col-xs-4 text-right">{{ExhaustPiping.ExhaustPipingGeneratorSummary?.TotalExhaustFlow}}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="col-xs-5 text-muted" translate>{{'exhaustPiping.Generator' | translate}}</div>
+                            <div class="col-xs-7 text-left">{{ExhaustPiping.ExhaustPipingGeneratorSummary?.Generator}}</div>
+                        </td>
+                        <td>
+                            <div class="col-xs-8 text-muted" translate>{{'exhaustPiping.MaximumBackPressure' | translate}} ({{ExhaustPiping.UnitMeasure?.WaterOrPascals}})</div>
+                            <div class="col-xs-4 text-right">{{ExhaustPiping.ExhaustPipingGeneratorSummary?.MaximumBackPressure}}</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 translate>exhaustPiping.ExhaustPipingInputs</h3>
+            </div>
+            <div class="panel-body">
+                <div class="col-sm-12 alert alert-danger" role="alert" *ngIf="ShowPressureDropError">
+                    <p translate>warning.ExhaustPipingPressureDropError</p>
+                </div>
+                <div class="col-sm-6">
+                    <br />
+                    <div class="form-group indent">
+                        <label translate>exhaustPiping.SizingMethod</label>
+                        <br />
+                        <select class="form-control" [(ngModel)]="ExhaustPiping.SizingMethodID" name="SizingMethod" (change)="calculateExhaustPipingSolution()">
+                            <option value="{{sizingMethod.ID}}" *ngFor="let sizingMethod of ExhaustPiping?.SizingMethodList">{{sizingMethod.LanguageKey | translate}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group indent">
+                        <label translate>exhaustPiping.PipeSize</label>
+                        <br />
+                        <select class="form-control" [(ngModel)]="ExhaustPiping.PipeSizeID" name="PipeSize" (change)="calculateExhaustPipingSolution()" [disabled]="ExhaustPiping.SizingMethodID != 2">
+                            <!--<option value="{{pipeSize.ID}}" *ngFor="let pipeSize of ExhaustPiping?.PipeSizeList">{{pipeSize.Description}}</option>-->
+                            <option value="{{pipeSize.ID}}" *ngFor="let pipeSize of FilteredPipeSizeList">{{pipeSize.Description}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group indent">
+                        <label translate>exhaustPiping.ExhaustSystemConfiguration</label>
+                        <br />
+                        <select class="form-control" [(ngModel)]="ExhaustPiping.ExhaustSystemConfigurationID" name="ExhaustSystemConfiguration" (change)="exhaustSystemConfigurationChanged()">
+                            <option value="{{exhaustSystemConfiguration.ID}}" *ngFor="let exhaustSystemConfiguration of ExhaustPiping?.ExhaustSystemConfigurationList">{{exhaustSystemConfiguration.Description}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <!--<h3>Inputs</h3>-->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="text-primary" translate>exhaustPiping.Inputs</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-4">
+                                <div class="form-group indent">
+                                    <label translate>
+                                        {{'exhaustPiping.Lengthofrun' | translate}}
+                                        ({{ExhaustPiping.UnitMeasure?.FeetOrMeters}})
+                                    </label>
+                                    <input class="form-control" OnlyNumeric="true" pattern="^[1-9][0-9]*(\.[0-9]+)?|\.[0-9]*[1-9][0-9]*$" type="text" [(ngModel)]="ExhaustPipingInput.LengthOfRun" (keyup)="calculateExhaustPipingSolution()" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group indent">
+                                    <label translate>exhaustPiping.NumberofStandardElbows</label>
+                                    <input class="form-control" OnlyNumeric="true" pattern="^0*[1-9]\d*$" type="text" [(ngModel)]="ExhaustPipingInput.NumberOfStandardElbows" (keyup)="calculateExhaustPipingSolution()" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group indent">
+                                    <label translate>{{'exhaustPiping.NumberofLongElbows'| translate}}*</label>
+                                    <input class="form-control" OnlyNumeric="true" pattern="^0*[1-9]\d*$" type="text" [(ngModel)]="ExhaustPipingInput.NumberOfLongElbows" (keyup)="calculateExhaustPipingSolution()" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group indent" translate>
+                                    <label translate>exhaustPiping.Numberof45elbows</label>
+                                    <input class="form-control" OnlyNumeric="true" pattern="^0*[1-9]\d*$" type="text" [(ngModel)]="ExhaustPipingInput.NumberOf45Elbows" (keyup)="calculateExhaustPipingSolution()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 translate>exhaustPiping.ExhaustPipingSolution</h3>
+        <div class="panel panel-default">
+            <table class="table table-condensed">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="col-xs-4 text-muted" translate>{{'exhaustPiping.PressureDrop' | translate}} ({{ExhaustPiping.UnitMeasure.WaterOrPascals}})</div>
+                            <div class="col-xs-4 text-left">{{ExhaustPiping.ExhaustPipingSolution?.PressureDrop}}</div>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br/>
+    <div *ngIf="!ExhaustPiping" translate>
+        {{'warning.NosolutionForAnalysis' | translate}}
+    </div>
+</fieldset>

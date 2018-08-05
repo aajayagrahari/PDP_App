@@ -1,0 +1,159 @@
+﻿
+<div *ngIf="TransientAnalysis && !loading">
+    <h3 class="indent" translate>transientAnalysis.TransientAnalysis</h3>
+    <br />
+    <div class="row indent">
+        <div class="col-md-6 indent">
+            <div class="panel panel-default">
+                <table class="table table-condensed">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="col-sm-12 text-center"><h4 translate>transientAnalysis.MostDifficultAlternator</h4></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col-xs-5 text-muted" translate>{{'transientAnalysis.Sequence' | translate}}:</div>
+                                <div class="col-xs-7 text-left">{{TransientAnalysis?.AlternatorTransientRequirement?.Sequence | translate}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col-xs-5 text-muted" translate>{{'transientAnalysis.Load' | translate}}:</div>
+                                <div class="col-xs-7 text-left">{{TransientAnalysis?.AlternatorTransientRequirement?.Load}}</div>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col-xs-5 text-muted" translate>{{'transientAnalysis.Starting' | translate}} kVA:</div>
+                                <div class="col-xs-7 text-left">{{TransientAnalysis?.AlternatorTransientRequirement?.StartingkVA}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col-xs-5 text-muted" translate>{{'transientAnalysis.VdipTolerance'| translate}}:</div>
+                                <div class="col-xs-7 text-left">{{TransientAnalysis?.AlternatorTransientRequirement?.VdipTolerance}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col-xs-5 text-muted" translate>{{'transientAnalysis.VdipExpected' | translate}}:</div>
+                                <div class="col-xs-7 text-left">{{TransientAnalysis?.AlternatorTransientRequirement?.VdipExpected}}</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6 indent">
+            <div class="panel panel-default">
+                <table class="table table-condensed">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="col-sm-12 text-center"><h4 translate>transientAnalysis.MostDifficultEngine</h4></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col-xs-5 text-muted" translate>{{'transientAnalysis.Sequence'| translate}}:</div>
+                                <div class="col-xs-7 text-left">{{TransientAnalysis?.EngineTransientRequirement?.Sequence | translate}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col-xs-5 text-muted" translate>{{'transientAnalysis.Load' | translate}}:</div>
+                                <div class="col-xs-7 text-left">{{TransientAnalysis?.EngineTransientRequirement?.Load}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col-xs-5 text-muted" translate>{{'transientAnalysis.Starting' |translate}} kW:</div>
+                                <div class="col-xs-7 text-left">{{TransientAnalysis?.EngineTransientRequirement?.StartingkW}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col-xs-5 text-muted" translate>{{'transientAnalysis.FdipTolerance' |translate}}:</div>
+                                <div class="col-xs-7 text-left">{{TransientAnalysis?.EngineTransientRequirement?.FdipTolerance}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col-xs-5 text-muted">{{'transientAnalysis.FdipExpected'| translate}}:</div>
+                                <div class="col-xs-7 text-left">{{TransientAnalysis?.EngineTransientRequirement?.FdipExpected}}</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row indent">
+        <div class="col-md-6 indent">
+            <h4 translate>{{'transientAnalysis.AlternatorTransientAnalysis' | translate}} (Vdip)</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center top" colspan="1" style="border-bottom-width:0px;"><strong translate>transientAnalysis.Sequence</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong translate>{{'transientAnalysis.Allowable' | translate}} Vdip</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong translate>{{'transientAnalysis.Expected' | translate}} Vdip</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong translate>{{'transientAnalysis.SequenceStarting' | translate}} kVA</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong translate>transientAnalysis.LargestTransientLoad</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let alternatorTransientAnalysis of TransientAnalysis?.AlternatorTransientAnalysisList">
+                        <td class="text-center">{{alternatorTransientAnalysis?.Sequence | translate}}</td>
+                        <td class="text-center">{{alternatorTransientAnalysis?.AllowableVdip}}</td>
+                        <td class="text-center">{{alternatorTransientAnalysis?.VdipExpected}}</td>
+                        <td class="text-center">{{alternatorTransientAnalysis?.SequenceStartingkVA}}</td>
+                        <td class="text-center">{{alternatorTransientAnalysis?.LargestTransientLoad}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6 indent">
+            <h4 translate>{{'transientAnalysis.EngineTransientAnalysis'| translate}} (Fdip)</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center top" colspan="1" style="border-bottom-width:0px;"><strong translate>transientAnalysis.Sequence</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong translate>{{'transientAnalysis.Allowable' | translate}}  Fdip</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong translate>{{'transientAnalysis.Expected' | translate}}  Fdip</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong translate>{{'transientAnalysis.SequenceStarting' | translate}}  kW</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong translate>transientAnalysis.LargestTransientLoad</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let engineTransientAnalysis of TransientAnalysis?.EngineTransientAnalysisList">
+                        <td class="text-center">{{engineTransientAnalysis?.Sequence | translate}}</td>
+                        <td class="text-center">{{engineTransientAnalysis?.AllowableFdip}}</td>
+                        <td class="text-center">{{engineTransientAnalysis?.FdipExpected}}</td>
+                        <td class="text-center">{{engineTransientAnalysis?.SequenceStartingkW}}</td>
+                        <td class="text-center">{{engineTransientAnalysis?.LargestTransientLoad}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+    <div class="row" *ngIf="TransientAnalysis?.IsVdipEngineConfiguration">
+        <label translate>* - {{'transientAnalysis.IndicatesExpectedVdip' | translate}}</label>
+    </div>
+</div>
+<br/>
+<div *ngIf="!TransientAnalysis && !loading">
+    <div class="row indent">
+        <div class="col-sm-8">
+            {{'warning.NosolutionForAnalysis' | translate}}
+        </div>
+    </div>
+</div>
+<div class="container">
+    <ngx-loading [show]="loading">
+    </ngx-loading>
+</div>

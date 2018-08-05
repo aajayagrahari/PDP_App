@@ -1,0 +1,276 @@
+
+<section class="content_dashboard">
+    <div class="jumbotron">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a routerLink="/home" translate>dashboard.Home</a></li>
+                <li><a [routerLink]="['/project', projectID]">{{projectDetails?.ProjectName}}</a></li>
+                <li class="active">{{solutionSummary.SolutionName}}</li>
+            </ol>
+            <pdpprojectheader [(projectDetails)]="projectDetails" (updatedProjectDetails)="updatedProjectDetails($event)"></pdpprojectheader>
+        </div>
+    </div>
+    <pdpsolutionheader [(solutionDetail)]="solutionDetail" (updatedSolution)="updatedSolution($event)" (pdfDownloadError)="pdfDownloadError($event)"></pdpsolutionheader>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <div class="alert alert-success alert-dismissible fade in" role="alert" *ngIf="requestForQuoteSuccess && !showRequestQuoteError">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <p translate>solutionSummary.warnings.requestForQuoteSuccess</p>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="alert alert-danger alert-dismissible fade in" role="alert" *ngIf="!requestForQuoteSuccess && showRequestQuoteError">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <p translate>solutionSummary.warnings.requestForQuoteError</p>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="alert alert-danger alert-dismissible fade in" role="alert" *ngIf="!isPDFDownloaded">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <p translate>solutionSummary.warnings.pdfDownlaodError</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <fieldset [disabled]="isReadOnlyAccess">
+                    <h2 translate>solutionSummary.RecommendedProduct</h2>
+          
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" style="font-size:18px;" *ngIf="solutionSummaryRecommendedProductDetails.Description!=undefined">
+                                <ng-container *ngFor="let content of solutionSummaryRecommendedProductDetails.Description.split('|')">
+                                    {{content | translate}}
+                                </ng-container>
+                                <br />
+                                <small *ngIf="solutionSummaryRecommendedProductDetails.DescriptionPartwo!=undefined">
+                                    <ng-container *ngFor="let content of solutionSummaryRecommendedProductDetails.DescriptionPartwo.split('|')">
+                                        {{content | translate}}
+                                    </ng-container>
+                                </small>
+                            </h3>
+                            <div class="panel-body">
+                                <button class="btn btn-default col-xs-12 col-sm-6 col-md-12 col-lg-12" style="margin-bottom: 10px;" (click)="requestForQuoteModal.show()" translate>
+                                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> RequestforQuote
+                                </button>
+                                <button class="btn btn-default col-xs-12 col-sm-6 col-md-12 col-lg-12" (click)="updateFuelTypeForSolution(0)" *ngIf="solutionSummary.FuelType == 'D' && !revertToDiesel" translate>
+                                    solutionSummary.ConverttoNaturalGas
+                                </button>
+                                <button class="btn btn-default col-xs-12 col-sm-6 col-md-12 col-lg-12" (click)="updateFuelTypeForSolution(1)" *ngIf="revertToDiesel" translate>
+                                    solutionSummary.ReverttoDiesel
+                                </button>
+                            </div>
+                        </div>
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td class="text-center"><strong style="font-size:16px;padding:2px;" [ngStyle]="getStyle(runningKWError)">{{solutionSummaryRecommendedProductDetails?.RunningKW}} %</strong><br /><small class="text-muted">Running kW</small></td>
+                                    <td class="text-center"><strong style="font-size:16px;padding:2px;" [ngStyle]="getStyle(fDipError)">{{solutionSummaryRecommendedProductDetails?.FDip}}</strong><br /><small class="text-muted">Fdip (Hz)</small></td>
+                                    <td class="text-center"><strong style="font-size:16px;padding:2px;" [ngStyle]="getStyle(thvdContError)">{{solutionSummaryRecommendedProductDetails?.THVDContinuous}}</strong><br /><small class="text-muted">THVD Cont.</small></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center"><strong style="font-size:16px;padding:2px;" [ngStyle]="getStyle(peakKWError)">{{solutionSummaryRecommendedProductDetails?.PeakKW}} %</strong><br /><small class="text-muted">Peak kW</small></td>
+                                    <td class="text-center"><strong style="font-size:16px;padding:2px;" [ngStyle]="getStyle(vDipError)">{{solutionSummaryRecommendedProductDetails?.VDip}} %</strong><br /><small class="text-muted">Vdip (%)</small></td>
+                                    <td class="text-center"><strong style="font-size:16px;padding:2px;" [ngStyle]="getStyle(thvdPeakError)">{{solutionSummaryRecommendedProductDetails?.THVDPeak}}</strong><br /><small class="text-muted">THVD Peak</small></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="panel-footer">
+                            <div class="form-group">
+                                <label translate>solutionSummary.FamilySelectionMethod</label>
+                                <select class="form-control" [(ngModel)]="solutionSummaryRecommendedProductDetails.FamilySelectionMethodID" name="FamilySelectionMethod" (change)="updateRecommendedProductDetails(solutionSummaryRecommendedProductDetails.GeneratorID, solutionSummaryRecommendedProductDetails.AlternatorID)">
+                                    <option value="{{familySelection.ID}}" *ngFor="let familySelection of solutionSummaryRecommendedProductDetails?.FamilySelectionMethodList">{{familySelection.LanguageKey | translate}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group" [hidden]="solutionSummaryRecommendedProductDetails.FamilySelectionMethodID != 2">
+                                <label translate>solutionSummary.ProductFamily</label>
+                                <select class="form-control" [(ngModel)]="solutionSummaryRecommendedProductDetails.ProductFamilyID" name="ProductFamily" (change)="updateRecommendedProductDetails(null, null)">
+                                    <option [value]=null *ngIf="solutionSummaryRecommendedProductDetails.ProductFamilyID == null">NA</option>
+                                    <option value="{{productFamily.ID}}" *ngFor="let productFamily of solutionSummaryRecommendedProductDetails?.ProductFamilyList">{{productFamily.LanguageKey | translate}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label translate>solutionSummary.SizingMethod</label>
+                                <select class="form-control" [(ngModel)]="solutionSummaryRecommendedProductDetails.SizingMethodID" name="SizingMethod" (change)="updateRecommendedProductDetails(solutionSummaryRecommendedProductDetails.GeneratorID, solutionSummaryRecommendedProductDetails.AlternatorID)">
+                                    <option value="{{sizingMethod.ID}}" *ngFor="let sizingMethod of solutionSummaryRecommendedProductDetails?.SizingMethodList">{{sizingMethod.LanguageKey | translate}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group" [hidden]="solutionSummaryRecommendedProductDetails.SizingMethodID != 2">
+                                <label translate>solutionSummary.Generator</label>
+                                <select class="form-control" [(ngModel)]="solutionSummaryRecommendedProductDetails.GeneratorID" name="Generator" (change)="updateRecommendedProductDetails(solutionSummaryRecommendedProductDetails.GeneratorID, null)">
+                                    <option [value]=null *ngIf="solutionSummaryRecommendedProductDetails.GeneratorID == null">NA</option>
+                                    <option value="{{generator.ID}}" *ngFor="let generator of solutionSummaryRecommendedProductDetails?.GeneratorList">{{generator.Description}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group" [hidden]="(solutionSummaryRecommendedProductDetails.SizingMethodID != 2)">
+                                <label translate>solutionSummary.Quantity</label>
+                                <select class="form-control" [(ngModel)]="solutionSummaryRecommendedProductDetails.ParallelQuantityID" name="ParallelQuantity" (change)="updateRecommendedProductDetails(solutionSummaryRecommendedProductDetails.GeneratorID, solutionSummaryRecommendedProductDetails.AlternatorID)">
+                                    <option value="{{parallelQuantity.ID}}" *ngFor="let parallelQuantity of solutionSummaryRecommendedProductDetails?.ParallelQuantityList">{{parallelQuantity.Description}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group" [hidden]="solutionSummaryRecommendedProductDetails.SizingMethodID != 2">
+                                <label translate>solutionSummary.Alternator</label>
+                                <select class="form-control" [(ngModel)]="solutionSummaryRecommendedProductDetails.AlternatorID" name="Alternator" (change)="updateRecommendedProductDetails(solutionSummaryRecommendedProductDetails.GeneratorID, solutionSummaryRecommendedProductDetails.AlternatorID)">
+                                    <option [value]=null *ngIf="solutionSummaryRecommendedProductDetails.AlternatorID == null">NA</option>
+                                    <option value="{{alternator.ID}}" *ngFor="let alternator of solutionSummaryRecommendedProductDetails?.AlternatorList">{{alternator.Description}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="col-md-8">
+                <tabset (onSelect)="loadSelectedTab($event)">
+                    <tab title="Loads" [disabled]="false">
+                        <h3 translate>solutionSummary.SolutionLimits</h3>
+                        <div class="panel panel-default">
+                            <table class="table table-condensed">
+                                <tbody>
+                                    <tr>
+                                        <td rowspan="2">
+                                            <div class="col-xs-6 text-muted" translate>solutionSummary.MaxLoading</div>
+                                            <div class="col-xs-6 text-right">{{solutionLimits?.MaxLoading}} %</div>
+                                        </td>
+                                        <td>
+                                            <div class="col-xs-6 text-muted">Fdip (Hz)</div>
+                                            <div class="col-xs-6 text-right">{{solutionLimits?.FDip}}</div>
+                                        </td>
+                                        <td>
+                                            <div class="col-xs-6 text-muted">THVD Cont.</div>
+                                            <div class="col-xs-6 text-right">{{solutionLimits?.THVDContinuous}}</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="col-xs-6 text-muted">Vdip (%)</div>
+                                            <div class="col-xs-6 text-right">{{solutionLimits?.VDip}} %</div>
+                                        </td>
+                                        <td>
+                                            <div class="col-xs-6 text-muted">THVD Peak</div>
+                                            <div class="col-xs-6 text-right">{{solutionLimits?.THVDPeak}}</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h3 translate>solutionSummary.LoadSummary</h3>
+                        <div class="panel panel-default">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th class="col-xs-4 text-center" translate>solutionSummary.Running</th>
+                                        <th class="col-xs-4 text-center" translate>solutionSummary.Transients</th>
+                                        <th class="col-xs-4 text-center" translate>solutionSummary.Harmonics</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="col-xs-6 text-muted">kW</div>
+                                            <div class="col-xs-6 text-right">{{solutionSummaryLoadSummary.RunningKW}}</div>
+                                        </td>
+                                        <td>
+                                            <div class="col-xs-6 text-muted">kW (step)</div>
+                                            <div class="col-xs-6 text-right">{{solutionSummaryLoadSummary.StepKW}}</div>
+                                        </td>
+                                        <td>
+                                            <div class="col-xs-6 text-muted">kVA</div>
+                                            <div class="col-xs-6 text-right">{{solutionSummaryLoadSummary.HarmonicsKVA}}</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="col-xs-6 text-muted">kVA</div>
+                                            <div class="col-xs-6 text-right">{{solutionSummaryLoadSummary.RunningKVA}}</div>
+                                        </td>
+                                        <td>
+                                            <div class="col-xs-6 text-muted">kW (peak)</div>
+                                            <div class="col-xs-6 text-right">{{solutionSummaryLoadSummary.PeakKW}}</div>
+                                        </td>
+                                        <td>
+                                            <div class="col-xs-6 text-muted">THID Cont.</div>
+                                            <div class="col-xs-6 text-right">{{solutionSummaryLoadSummary.THIDContinuous}} %</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="col-xs-6 text-muted">PF</div>
+                                            <div class="col-xs-6 text-right">{{solutionSummaryLoadSummary.RunningPF}}</div>
+                                        </td>
+                                        <td>
+                                            <div class="col-xs-6 text-muted">kVA (step)</div>
+                                            <div class="col-xs-6 text-right">{{solutionSummaryLoadSummary.StepKVA}}</div>
+                                        </td>
+                                        <td>
+                                            <div class="col-xs-6 text-muted">THID Peak</div>
+                                            <div class="col-xs-6 text-right">{{solutionSummaryLoadSummary.THIDPeak}} %</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Loads -->
+                        <div class="form-group" *ngIf="!isReadOnlyAccess">
+                            <a class="btn btn-primary" title="{{'AddLoad' | translate}}'" [routerLink]="['/project', projectID, 'solution', solutionID, 'addLoad']" translate>
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> solutionSummary.AddLoad
+                            </a>
+                        </div>
+
+                        <loadSummaryLoads #loads [(loadSummaryLoads)]="loadSummaryLoads" [vDipFDipRecommendedProduct]="vDipFDipRecommendedProduct" (UpdateSolutionSummaryLoadSummary)="UpdateSolutionSummaryLoadSummary($event)"
+                                          (UpdateSolutionSummary)="UpdateSolutionSummary($event)" [readOnlyAccess]="isReadOnlyAccess"></loadSummaryLoads>
+                    </tab>
+                    <tab title="{{'tab.Documentation' | translate}}" [disabled]="false">
+                        <br />
+                        <ul *ngIf="solutionSummaryRecommendedProductDetails?.GeneratorDocuments?.length > 0">
+                            <li *ngFor="let doc of solutionSummaryRecommendedProductDetails?.GeneratorDocuments"><a [href]="doc.DocumentURL">{{(doc.LanguageKey | translate) || doc.Description}}</a></li>
+                        </ul>
+                        <label *ngIf="solutionSummaryRecommendedProductDetails?.GeneratorDocuments?.length == 0" class="indent" translate>tDocumentation.noDoumnetsAvailable</label>
+                    </tab>
+                    <tab title="{{'tab.GasPiping' | translate}}" [disabled]="false">
+                        <gasPiping [(solutionDetail)]="solutionDetail" [readOnlyAccess]="isReadOnlyAccess" #gasPiping></gasPiping>
+                    </tab>
+                    <tab title="{{'tab.ExhaustPiping' | translate}}" [disabled]="false">
+                        <exhaustPiping [(solutionDetail)]="solutionDetail" [readOnlyAccess]="isReadOnlyAccess" #exhaustPiping></exhaustPiping>
+                    </tab>
+                    <tab title="{{'tab.TransientAnalysis' | translate}}" [disabled]="false">
+                        <transientAnalysis [(solutionDetail)]="solutionDetail" #transientAnalysis></transientAnalysis>
+                    </tab>
+                    <tab title="{{'tab.HarmonicAnalysis' | translate}}" [disabled]="false">
+                        <harmonicAnalysis [(solutionDetail)]="solutionDetail" #harmonicAnalysis></harmonicAnalysis>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+
+    <app-modal #requestForQuoteModal>
+        <div class="app-modal-header">
+            <h4 class="modal-title" translate>RequestforQuote</h4>
+        </div>
+        <div class="app-modal-body">
+            <div>
+                <br />
+                <div class="alert alert-danger alert-dismissible fade in" *ngIf="showCommentsRequiredError" role="alert">
+                    <button type="button" class="close" (click)="HideError()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <p *ngIf="showCommentsRequiredError" translate>solutionSummary.warnings.commentsRequiredError</p>
+                </div>
+                <div class="form-group">
+                    <label translate>solutionSummary.Comments</label>
+                    <textarea required class="form-control" rows="3" [(ngModel)]="requestForQuote.Comments" name="Description"></textarea>
+                </div>
+
+            </div>
+        </div>
+        <div class="app-modal-footer">
+            <button type="button" class="btn btn-default" (click)="requestForQuoteModal.hide()" translate>Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="processRequestForQuote()" translate>Submit</button>
+        </div>
+    </app-modal>
+    <div class="container">
+        <ngx-loading [show]="loading">
+        </ngx-loading>
+    </div>
+</section>

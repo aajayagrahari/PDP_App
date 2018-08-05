@@ -1,0 +1,40 @@
+@media (max-width: 767px) {
+    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
+    .body-content {
+        padding-top: 50px;
+    }
+
+}
+.cookie-law-wrapper {
+    background: #333;
+    color: #bbb;
+    display: block;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-size: 15px;
+    font-weight: 200;
+    line-height: 20px;
+    position: fixed;
+    left: 0px;
+    width: 100%;
+    z-index: 999999999;
+    font-smooth: always;
+    -webkit-font-smoothing: antialiased;
+}
+
+.cookie-lawText {
+    padding: 6px 0;
+    display: inline-block;
+    line-height: 1.5;
+    font-weight: normal;
+    color: #fff;
+    font-size: 15px;
+    font-family: 'Brand',Arial,Helvetica,Sans-Serif;
+    text-align: center;
+}
+.copy {
+    box-sizing: border-box;
+    padding: 7px 60px 7px 10px;
+    font-size: 15px;
+    height: 12%;
+} 
+

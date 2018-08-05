@@ -1,0 +1,247 @@
+﻿<form #solutionSetupDetailForm="ngForm" name="solutionSetupDetailForm">
+    <div class="row">
+        <div class="col-sm-4">
+            <h4 class="text-primary" translate>solutionSetupDetail.Environment</h4>
+            <div class="form-group indent">
+                <label translate tooltip="{{'solutionSetupDetail.AmbientTemperatureToolTip' | translate}}">solutionSetupDetail.AmbientTemperature</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.AmbientTemperatureID" name="AmbientTemperature">
+                    <option value="{{ambtemp.ID}}" *ngFor="let ambtemp of solutionSetupDto?.ProjectSolutionPickListDto.AmbientTemperatureList">{{ambtemp.Description}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate tooltip="{{'solutionSetupDetail.ElevationToolTip' | translate}}">solutionSetupDetail.Elevation</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.ElevationID" name="Elevation">
+                    <option value="{{elev.ID}}" *ngFor="let elev of solutionSetupDto?.ProjectSolutionPickListDto.ElevationList">{{elev.Description}}</option>
+                </select>
+            </div>
+
+            <h4 class="text-primary" translate>solutionSetupDetail.ElectricalConfiguration</h4>
+            <div class="form-group indent">
+                *<label translate  tooltip="{{'solutionSetupDetail.PhaseToolTip' | translate}}">solutionSetupDetail.Phase</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.VoltagePhaseID" name="VoltagePhase" required #VoltagePhase="ngModel"
+                        (change)="MapVoltageNominal(solutionSetupDto.SolutionSetupMappingValuesDto.VoltagePhaseID, solutionSetupDto.SolutionSetupMappingValuesDto.FrequencyID)">
+                    <option [value]=undefined *ngIf="solutionSetupDto.SolutionSetupMappingValuesDto.VoltagePhaseID == undefined" translate>{{'solutionSetupDetail.Select' | translate}}</option>
+                    <option value="{{phase.ID}}" *ngFor="let phase of solutionSetupDto?.ProjectSolutionPickListDto.VoltagePhaseList">{{phase.LanguageKey | translate}}</option>
+                </select>
+                <div class="alert alert-danger" *ngIf="(VoltagePhase.invalid && (VoltagePhase.dirty || VoltagePhase.touched)) || (invalidForm && VoltagePhase.invalid)" translate>
+                    warning.VoltagePhaseValidation
+                </div>
+            </div>
+            <div class="form-group indent">
+                *<label translate  tooltip="{{'solutionSetupDetail.FrequencyToolTip' | translate}}">solutionSetupDetail.Frequency</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.FrequencyID" name="Frequency" required #Frequency="ngModel"
+                        (change)="MapVoltageNominal(solutionSetupDto.SolutionSetupMappingValuesDto.VoltagePhaseID, solutionSetupDto.SolutionSetupMappingValuesDto.FrequencyID)">
+                    <option [value]=undefined *ngIf="solutionSetupDto.SolutionSetupMappingValuesDto.FrequencyID == undefined" translate>{{'solutionSetupDetail.Select' | translate}}</option>
+                    <option value="{{frequency.ID}}" *ngFor="let frequency of solutionSetupDto?.ProjectSolutionPickListDto.FrequencyList">{{frequency.Description}}</option>
+                </select>
+                <div class="alert alert-danger" *ngIf="(Frequency.invalid && (Frequency.dirty || Frequency.touched)) || (invalidForm && Frequency.invalid)" translate>
+                    warning.FrequencyValidation
+                </div>
+            </div>
+            <div class="form-group indent">
+                *<label translate  tooltip="{{'solutionSetupDetail.VoltageNToolTip' | translate}}">solutionSetupDetail.VoltageN</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.VoltageNominalID" name="VoltageNominal" required #VoltageNominal="ngModel"
+                        (change)="MapVoltageSpecific(solutionSetupDto.SolutionSetupMappingValuesDto.VoltageNominalID)">
+                    <option [value]=undefined *ngIf="solutionSetupDto.SolutionSetupMappingValuesDto.VoltageNominalID == undefined" translate>{{'solutionSetupDetail.Select' | translate}}</option>
+                    <option value="{{voltageNominal.ID}}" *ngFor="let voltageNominal of solutionSetupDto?.ProjectSolutionPickListDto.VoltageNominalList">{{voltageNominal.LanguageKey | translate}}</option>
+                </select>
+                <div translate class="alert alert-danger" *ngIf="(VoltageNominal.invalid && (VoltageNominal.dirty || VoltageNominal.touched)) || (invalidForm && VoltageNominal.invalid)">
+                    warning.VoltageNominalValidation <br/>
+                    warning.VoltageNominalValidationDependancy
+                </div>
+            </div>
+            <div class="form-group indent">
+                *<label translate  tooltip="{{'solutionSetupDetail.VoltageSToolTip' | translate}}">solutionSetupDetail.VoltageS</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.VoltageSpecificID" name="VoltageSpecific" required #VoltageSpecific="ngModel"
+                        (change)="MapVoltageDipUnitsChange(solutionSetupDto.SolutionSetupMappingValuesDto.VoltageDipUnitsID)">
+                    <option [value]=undefined *ngIf="solutionSetupDto.SolutionSetupMappingValuesDto.VoltageSpecificID == undefined">{{'solutionSetupDetail.Select' | translate}}</option>
+                    <option value="{{voltageSpecific.ID}}" *ngFor="let voltageSpecific of solutionSetupDto?.ProjectSolutionPickListDto.VoltageSpecificList">{{voltageSpecific.Description}}</option>
+                </select>
+                <div translate class="alert alert-danger" *ngIf="(VoltageSpecific.invalid && (VoltageSpecific.dirty || VoltageSpecific.touched)) || (invalidForm && VoltageSpecific.invalid)">
+                    warning.VoltageSpecificValidation <br />
+                    warning.VoltageSpecificValidationDependancy
+                </div>
+            </div>
+
+            <h4 class="text-primary" translate>solutionSetupDetail.Units</h4>
+            <div class="form-group indent">
+                *<label translate  tooltip="{{'solutionSetupDetail.UnitsToolTip' | translate}}">solutionSetupDetail.Units</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.UnitsID" name="Units" required #Units="ngModel">
+                    <option [value]=undefined *ngIf="solutionSetupDto.SolutionSetupMappingValuesDto.UnitsID == undefined" translate>{{'solutionSetupDetail.Select' | translate}}</option>
+                    <option value="{{unit.ID}}" *ngFor="let unit of solutionSetupDto?.ProjectSolutionPickListDto.UnitsList">{{unit.LanguageKey | translate}}</option>
+                </select>
+                <div class="alert alert-danger" *ngIf="(Units.invalid && (Units.dirty || Units.touched)) || (invalidForm && Units.invalid)" translate>
+                    warning.UnitValidation
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-4">
+            <h4 class="text-primary" translate>solutionSetupDetail.MaximumAllowableTransients</h4>
+            <div class="form-group indent">
+                <label translate tooltip="{{'solutionSetupDetail.MaximumRunningLoadToolTip' | translate}}">solutionSetupDetail.MaximumRunningLoad</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.MaxRunningLoadID" name="MaxRunningLoad">
+                    <option value="{{maxRunningLoad.ID}}" *ngFor="let maxRunningLoad of solutionSetupDto?.ProjectSolutionPickListDto.MaxRunningLoadList">
+                        {{maxRunningLoad.Description}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate  tooltip="{{'solutionSetupDetail.VoltageDipToolTip' | translate}}">solutionSetupDetail.VoltageDip</label>
+                <div class="form-inline">
+                    <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.VoltageDipID" name="VoltageDip">
+                        <option value="{{voltageDip.ID}}" *ngFor="let voltageDip of solutionSetupDto?.ProjectSolutionPickListDto.VoltageDipList">
+                            {{voltageDip.Description}}
+                        </option>
+                    </select>
+                    <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.VoltageDipUnitsID" name="VoltageDipUnits" (change)="MapVoltageDipUnitsChange(solutionSetupDto.SolutionSetupMappingValuesDto.VoltageDipUnitsID)">
+                        <option value="{{voltageDipUnit.ID}}" *ngFor="let voltageDipUnit of solutionSetupDto?.ProjectSolutionPickListDto.VoltageDipUnitList">
+                            {{voltageDipUnit.LanguageKey | translate}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate  tooltip="{{'solutionSetupDetail.FrequencyDipToolTip' | translate}}">solutionSetupDetail.FrequencyDip</label>
+                <div class="form-inline">
+                    <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.FrequencyDipID" name="FrequencyDip">
+                        <option value="{{frequencyDip.ID}}" *ngFor="let frequencyDip of solutionSetupDto?.ProjectSolutionPickListDto.FrequencyDipList">
+                            {{frequencyDip.Description}}
+                        </option>
+                    </select>
+                    <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.FrequencyDipUnitsID" name="FrequencyDipUnits" (change)="MapFrequencyDipUnitsChange(solutionSetupDto.SolutionSetupMappingValuesDto.FrequencyDipUnitsID)">
+                        <option value="{{frequencyDipUnit.ID}}" *ngFor="let frequencyDipUnit of solutionSetupDto?.ProjectSolutionPickListDto.FrequencyDipUnitList">
+                            {{frequencyDipUnit.LanguageKey | translate}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <h4 class="text-primary" translate>solutionSetupDetail.MaxAllowableVoltage</h4>
+            <div class="form-group indent">
+                <label translate  tooltip="{{'solutionSetupDetail.ContinuousToolTip' | translate}}">solutionSetupDetail.Continuous</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.ContinuousAllowableVoltageDistortionID" name="ContinuousAllowableVoltageDistortion">
+                    <option value="{{conVoltageDistortion.ID}}"
+                            *ngFor="let conVoltageDistortion of solutionSetupDto?.ProjectSolutionPickListDto.ContinuousAllowableVoltageDistortionList">
+                        {{conVoltageDistortion.Description}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate tooltip="{{'solutionSetupDetail.MomentaryToolTip' | translate}}">solutionSetupDetail.Momentary</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.MomentaryAllowableVoltageDistortionID" name="MomentaryAllowableVoltageDistortion">
+                    <option value="{{momentaryVoltageDistortion.ID}}"
+                            *ngFor="let momentaryVoltageDistortion of solutionSetupDto?.ProjectSolutionPickListDto.MomentaryAllowableVoltageDistortionList">
+                        {{momentaryVoltageDistortion.Description}}
+                    </option>
+                </select>
+            </div>
+
+            <h4 class="text-primary" translate >solutionSetupDetail.Engine</h4>
+            <div class="form-group indent">
+                <label translate tooltip="{{'solutionSetupDetail.DutyToolTip' | translate}}">solutionSetupDetail.Duty</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.EngineDutyID" name="EngineDuty">
+                    <option value="{{engineDuty.ID}}" *ngFor="let engineDuty of solutionSetupDto?.ProjectSolutionPickListDto.EngineDutyList">{{engineDuty.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                *<label translate  tooltip="{{'solutionSetupDetail.FuelToolTip' | translate}}">solutionSetupDetail.Fuel</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.FuelTypeID" name="FuelType" required #FuelType="ngModel"
+                        (change)="MapFuelTypeDependents(solutionSetupDto.SolutionSetupMappingValuesDto.FuelTypeID)">
+                    <option [value]=undefined *ngIf="solutionSetupDto.SolutionSetupMappingValuesDto.FuelTypeID == undefined" translate>{{'solutionSetupDetail.Select' | translate}}</option>
+                    <option value="{{fuelType.ID}}" *ngFor="let fuelType of solutionSetupDto?.ProjectSolutionPickListDto.FuelTypeList">{{fuelType.LanguageKey | translate}}</option>
+                </select>
+                <div translate class="alert alert-danger" *ngIf="(FuelType.invalid && (FuelType.dirty || FuelType.touched)) || (invalidForm && FuelType.invalid)">
+                    warning.FuelValidation
+                </div>
+            </div>
+
+        </div>
+        <div class="col-sm-4">
+            <h4 class="text-primary" translate>solutionSetupDetail.RegulatoryInformation</h4>
+            <div class="form-group indent">
+                <label translate  tooltip="{{'solutionSetupDetail.RegulatoryFiltersToolTip' | translate}}">solutionSetupDetail.RegulatoryFilters</label>
+                <angular2-multiselect [data]="solutionSetupDto?.ProjectSolutionPickListDto.RegulatoryFilterList"
+                                      [(ngModel)]="solutionSetupDto?.SolutionSetupMappingValuesDto.SelectedRegulatoryFilterList"
+                                      [settings]="dropdownSettings" name="SelectedRegulatoryFilterList" #SelectedRegulatoryFilterList="ngModel" translate>
+                    
+                    <c-item>
+                        <ng-template let-item="item">
+                            <label style="color: #333;min-width: 150px;">{{item.LanguageKey | translate}}</label>
+                        </ng-template>
+                    </c-item>
+
+                </angular2-multiselect>
+            </div> 
+            <div class="form-group indent">
+                <label translate tooltip="{{'solutionSetupDetail.ApplicationToolTip' | translate}}">solutionSetupDetail.Application</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.SolutionApplicationID" name="SolutionApplication">
+                    <option value="{{application.ID}}" *ngFor="let application of solutionSetupDto?.ProjectSolutionPickListDto.SolutionApplicationList">
+                        {{application.LanguageKey | translate}}
+                    </option>
+                </select>
+            </div>
+
+            <h4 class="text-primary" translate>solutionSetupDetail.GeneratorConfiguration</h4>
+            <div class="form-group indent" style="display:none">
+                <label translate  tooltip="{{'solutionSetupDetail.EnclosureTypeToolTip' | translate}}">solutionSetupDetail.EnclosureType</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.EnclosureTypeID" name="EnclosureType">
+                    <option value="{{enclosure.ID}}" *ngFor="let enclosure of solutionSetupDto?.ProjectSolutionPickListDto.EnclosureTypeList">
+                        {{enclosure.Description}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate tooltip="{{'solutionSetupDetail.soundDesiredToolTip' | translate}}">solutionSetupDetail.soundDesired</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.DesiredSoundID" name="DesiredSound">
+                    <option value="{{soundDesired.ID}}" *ngFor="let soundDesired of solutionSetupDto?.ProjectSolutionPickListDto.DesiredSoundList">
+                        {{soundDesired.LanguageKey | translate}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                *<label translate  tooltip="{{'solutionSetupDetail.FuelTankToolTip' | translate}}">solutionSetupDetail.FuelTank</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.FuelTankID" name="FuelTank" required #FuelTank="ngModel">
+                    <option [value]=undefined *ngIf="solutionSetupDto.SolutionSetupMappingValuesDto.FuelTankID == undefined" translate>{{'solutionSetupDetail.Select' | translate}}</option>
+                    <option value="{{fuelTank.ID}}" *ngFor="let fuelTank of solutionSetupDto?.ProjectSolutionPickListDto.FuelTankList">
+                        {{fuelTank.LanguageKey | translate}}
+                    </option>
+                </select>
+                <div class="alert alert-danger" *ngIf="(FuelTank.invalid && (FuelTank.dirty || FuelTank.touched)) || (invalidForm && FuelTank.invalid)" translate>
+                    warning.FueltankValidation <br />
+                    warning.FueltankValidationDependancy
+                </div>
+            </div>
+            <div class="form-group indent">
+                *<label translate  tooltip="{{'solutionSetupDetail.RuntimeDesiredToolTip' | translate}}">solutionSetupDetail.RuntimeDesired</label>
+                <select translate class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.DesiredRunTimeID" name="DesiredRunTime" required #DesiredRunTime="ngModel">
+                    <option [value]=undefined *ngIf="solutionSetupDto.SolutionSetupMappingValuesDto.DesiredRunTimeID == undefined">{{'solutionSetupDetail.Select' | translate}}</option>
+                    <option value="{{runtimeDesired.ID}}" *ngFor="let runtimeDesired of solutionSetupDto?.ProjectSolutionPickListDto.DesiredRunTimeList">
+                        {{runtimeDesired.LanguageKey | translate}}
+                    </option>
+                </select>
+                <div translate class="alert alert-danger" *ngIf="(DesiredRunTime.invalid && (DesiredRunTime.dirty || DesiredRunTime.touched)) || (invalidForm && DesiredRunTime.invalid)">
+                    warning.DesireRuntimeValidation <br/>
+                    warning.DesireRuntimeValidationDependancy
+                </div>
+            </div>
+
+            <h4 class="text-primary" translate>solutionSetupDetail.LoadSequenceConfiguration</h4>
+            <div class="form-group indent">
+                <label translate tooltip="{{'solutionSetupDetail.CyclicToolTip' | translate}}">{{'solutionSetupDetail.Cyclic' |translate}} #1</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.LoadSequenceCyclic1ID" name="LoadSequenceCyclic1">
+                    <option value="{{cyclic1.ID}}" *ngFor="let cyclic1 of solutionSetupDto?.ProjectSolutionPickListDto.LoadSequenceCyclic">{{cyclic1.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate tooltip="{{'solutionSetupDetail.CyclicToolTip' | translate}}">{{'solutionSetupDetail.Cyclic' |translate}} #2</label>
+                <select class="form-control" [(ngModel)]="solutionSetupDto.SolutionSetupMappingValuesDto.LoadSequenceCyclic2ID" name="LoadSequenceCyclic2">
+                    <option value="{{cyclic2.ID}}" *ngFor="let cyclic2 of solutionSetupDto?.ProjectSolutionPickListDto.LoadSequenceCyclic">{{cyclic2.LanguageKey | translate}}</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+</form>
+

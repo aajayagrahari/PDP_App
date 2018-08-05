@@ -1,0 +1,276 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <IsPackable>false</IsPackable>
+    <Configurations>Debug;Release;Production;Staging;Development;Test</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Node.js" Version="5.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
+    <Compile Remove="ClientApp\app\components\NewFolder\**" />
+    <Content Remove="ClientApp\**" />
+    <EmbeddedResource Remove="ClientApp\app\components\NewFolder\**" />
+    <None Remove="ClientApp\app\components\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\app\app.module.common.ts" />
+    <None Remove="ClientApp\app\components\acLoad\acLoad.component.ts" />
+    <None Remove="ClientApp\app\components\AddressValidation\addressValidation.component.ts" />
+    <None Remove="ClientApp\app\components\basicLoad\basicLoad.component.ts" />
+    <None Remove="ClientApp\app\components\confirmEmail\confirmEmail.component.ts" />
+    <None Remove="ClientApp\app\components\confirm\confirm.component.ts" />
+    <None Remove="ClientApp\app\components\gasPiping\gasPiping.component.ts" />
+    <None Remove="ClientApp\app\components\harmonicAnalysis\harmonicAnalysis.component.ts" />
+    <None Remove="ClientApp\app\components\lightingLoad\lightingLoad.component.ts" />
+    <None Remove="ClientApp\app\components\loadCharacteristics\loadCharacteristics.component.ts" />
+    <None Remove="ClientApp\app\components\loadSummaryLoads\loadSummaryLoads.component.ts" />
+    <None Remove="ClientApp\app\components\modal\modal.component.ts" />
+    <None Remove="ClientApp\app\components\resetPassword\resetPassword.component.ts" />
+    <None Remove="ClientApp\app\components\Services\common.service.ts" />
+    <None Remove="ClientApp\app\components\Services\dashboard.services.ts" />
+    <None Remove="ClientApp\app\components\Services\httpclient.component.ts" />
+    <None Remove="ClientApp\app\components\Services\localizedate.service.ts" />
+    <None Remove="ClientApp\app\components\Services\storeage.service.ts" />
+    <None Remove="ClientApp\app\components\Services\utility.service.ts" />
+    <None Remove="ClientApp\app\components\solutionSetupDetail\solutioSetupDetail.component.ts" />
+    <None Remove="ClientApp\app\components\transientAnalysis\transientAnalysis.component.ts" />
+    <None Remove="ClientApp\app\components\upsLoad\upsLoad.component.ts" />
+    <None Remove="ClientApp\app\components\userDefaultSolutionSetup\userDefaultSolutionSetup.component.ts" />
+    <None Remove="ClientApp\app\components\welderLoad\welderLoad.component.ts" />
+    <None Remove="ClientApp\app\components\_authenticate\authenticate.ts" />
+    <None Remove="ClientApp\app\components\_directives\equal-validator.directive.ts" />
+    <None Remove="ClientApp\app\components\_directives\onlyNumericValidator.directive.ts" />
+    <None Remove="ClientApp\app\components\_models\acLoad.model.ts" />
+    <None Remove="ClientApp\app\components\_models\addressValidation.model.ts" />
+    <None Remove="ClientApp\app\components\_models\analysisReport.model.ts" />
+    <None Remove="ClientApp\app\components\_models\dashboard.model.ts" />
+    <None Remove="ClientApp\app\components\_models\Enum.model.ts" />
+    <None Remove="ClientApp\app\components\_models\lightingLoad.model.ts" />
+    <None Remove="ClientApp\app\components\_models\loadCharacteristics.model.ts" />
+    <None Remove="ClientApp\app\components\_models\register.model.ts" />
+    <None Remove="ClientApp\app\components\_models\load.model.ts" />
+    <None Remove="ClientApp\app\components\_models\report.model.ts" />
+    <None Remove="ClientApp\app\components\_models\solutionSummary.model.ts" />
+    <None Remove="ClientApp\app\components\_models\upsLoad.model.ts" />
+    <None Remove="ClientApp\app\components\_models\welderLoad.model.ts" />
+    <None Remove="ClientApp\app\routes.ts" />
+    <None Remove="ClientApp\app\shared.module.ts" />
+    <None Remove="ClientApp\environments\environment.dev.ts" />
+    <None Remove="ClientApp\environments\environment.prod.ts" />
+    <None Remove="ClientApp\environments\environment.qa.ts" />
+    <None Remove="Properties\PublishProfiles\PowerDesignPro20180116091705 - Web Deploy.pubxml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\fonts\bootstrap\glyphicons-halflings-regular.svg" />
+    <None Include="wwwroot\fonts\bootstrap\glyphicons-halflings-regular.woff2" />
+    <None Include="wwwroot\javascripts\bootstrap-sprockets.js" />
+    <None Include="wwwroot\javascripts\bootstrap.js" />
+    <None Include="wwwroot\javascripts\bootstrap.min.js" />
+    <None Include="wwwroot\javascripts\bootstrap\affix.js" />
+    <None Include="wwwroot\javascripts\bootstrap\alert.js" />
+    <None Include="wwwroot\javascripts\bootstrap\button.js" />
+    <None Include="wwwroot\javascripts\bootstrap\carousel.js" />
+    <None Include="wwwroot\javascripts\bootstrap\collapse.js" />
+    <None Include="wwwroot\javascripts\bootstrap\dropdown.js" />
+    <None Include="wwwroot\javascripts\bootstrap\modal.js" />
+    <None Include="wwwroot\javascripts\bootstrap\popover.js" />
+    <None Include="wwwroot\javascripts\bootstrap\scrollspy.js" />
+    <None Include="wwwroot\javascripts\bootstrap\tab.js" />
+    <None Include="wwwroot\javascripts\bootstrap\tooltip.js" />
+    <None Include="wwwroot\javascripts\bootstrap\transition.js" />
+    <None Include="wwwroot\javascripts\systemjs-text-plugin.js" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_alerts.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_background-variant.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_border-radius.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_buttons.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_center-block.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_clearfix.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_forms.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_gradients.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_grid-framework.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_grid.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_hide-text.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_image.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_labels.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_list-group.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_nav-divider.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_nav-vertical-align.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_opacity.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_pagination.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_panels.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_progress-bar.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_reset-filter.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_reset-text.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_resize.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_responsive-visibility.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_size.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_tab-focus.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_table-row.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_text-emphasis.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_text-overflow.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\mixins\_vendor-prefixes.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_alerts.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_badges.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_breadcrumbs.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_button-groups.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_buttons.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_carousel.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_close.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_code.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_component-animations.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_dropdowns.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_forms.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_glyphicons.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_grid.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_input-groups.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_jumbotron.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_labels.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_list-group.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_media.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_mixins.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_modals.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_navbar.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_navs.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_normalize.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_pager.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_pagination.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_panels.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_popovers.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_print.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_progress-bars.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_responsive-embed.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_responsive-utilities.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_scaffolding.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_tables.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_theme.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_thumbnails.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_tooltip.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_type.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_utilities.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_variables.scss" />
+    <None Include="wwwroot\stylesheets\bootstrap\_wells.scss" />
+    <None Include="wwwroot\stylesheets\_bootstrap-compass.scss" />
+    <None Include="wwwroot\stylesheets\_bootstrap-mincer.scss" />
+    <None Include="wwwroot\stylesheets\_bootstrap-sprockets.scss" />
+    <None Include="wwwroot\stylesheets\_bootstrap.scss" />
+    <None Include="wwwroot\Style\pdp_style.scss" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PowerDesignPro.Processor\PowerDesignPro.Processor.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\components\acLoad\acLoad.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\acLoad\acLoad.component.html" />
+    <TypeScriptCompile Include="ClientApp\app\components\AddressValidation\AddressValidation.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\basicLoad\basicLoad.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\confirmEmail\confirmEmail.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\confirm\confirm.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\exhaustPipingReport\exhaustPipingReport.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\exhaustPiping\exhaustPiping.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\gasPipingReport\gasPipingReport.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\gasPiping\gasPiping.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\harmonicAnalysis\harmonicAnalysis.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\lightingLoad\lightingLoad.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\loadCharacteristics\loadCharacteristics.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\loadSummaryLoads\loadSummaryLoads.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\modal\modal.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\motorLoad\motorLoad.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\resetPassword\resetPassword.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\Services\common.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\Services\solution.services.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\Services\project.services.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\Services\dashboard.services.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\Services\httpclient.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\Services\user.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\Services\storeage.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\Services\localizedate.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\Services\utility.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\solutionSetupDetail\solutioSetupDetail.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\transientAnalysis\transientAnalysis.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\upsLoad\upsLoad.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\userDefaultSolutionSetup\userDefaultSolutionSetup.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\welderLoad\welderLoad.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_authenticate\authenticate.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_directives\equal-validator.directive.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_directives\onlyNumericValidator.directive.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\acLoad.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\addressValidation.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\analysisReport.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\basicLoad.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\lightingLoad.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\load.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\loadCharacteristics.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\register.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\report.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\solutionSetup.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\project.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\dashboard.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\solutionSummary.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\motorLoad.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\upsLoad.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\_models\welderLoad.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\project.module.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\project.routes.ts" />
+    <TypeScriptCompile Include="ClientApp\app\routes.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\shared.module.ts" />
+    <TypeScriptCompile Include="ClientApp\environments\environment.dev.ts" />
+    <TypeScriptCompile Include="ClientApp\environments\environment.prod.ts" />
+    <TypeScriptCompile Include="ClientApp\environments\environment.qa.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\stylesheets\themes\default\" />
+    <Folder Include="wwwroot\stylesheets\themes\pramac\" />
+  </ItemGroup>
+
+  <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+
+    <!-- In development, the dist files won't exist on the first run or when cloning to
+         a different machine, so rebuild them if not already present. -->
+    <Message Importance="high" Text="Performing first-run Webpack build..." />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec Command="npm install" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js --env.prod" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --env.prod" />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="wwwroot\dist\**; ClientApp\dist\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+  <ProjectExtensions><VisualStudio><UserProperties wwwroot_4i18n_4en_1json__JSONSchema="http://json.schemastore.org/apple-app-site-association" /></VisualStudio></ProjectExtensions>
+
+</Project>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="LogoLine" datatype="html">
+        <source>Power Design Pro<x id="START_SUPERSCRIPT" ctype="x-sup"/>TM<x id="CLOSE_SUPERSCRIPT" ctype="x-sup"/> - Sign In</source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">C:/Users/Achouras/Source/Repos/power-design-pro-webapp/PowerDesignPro/ClientApp/app/components/login/login.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <note priority="1" from="description">Tag Line </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

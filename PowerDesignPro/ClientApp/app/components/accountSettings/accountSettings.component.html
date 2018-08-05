@@ -1,0 +1,200 @@
+﻿
+<section *ngIf="UserRegisterDto">
+    <div class="jumbotron panel-register">
+        <div class="container">
+            <h2 translate>AccountSettings.Header</h2>
+        </div>
+    </div>
+    <!--<div class="alert alert-success alert-dismissible fade in" role="alert" *ngIf="!error && registerSuccess">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p>Account Update Successfully</p>
+    </div>-->
+    <div class="container body-content" *ngIf="error || !registerSuccess">
+        <form #UserRegistrationForm="ngForm" (ngSubmit)="UserRegistration(UserRegistrationForm.valid)" autocomplete="off">
+            <div class="row">
+                <div class="col-md-12">
+                    <label translate class="text-required">Required</label>
+                    <div *ngIf="errorMessage" class="alert alert-danger">
+                        <span>Please correct the following errors</span>
+                        <ul>
+                            <li>{{errorMessage}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="alert alert-danger alert-dismissible fade in col-md-12" role="alert" *ngIf="error && !registerSuccess">
+                <button type="button" id="alerterror" class="close" (click)="HideAlert()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <p><strong>An error occurred while processing your request</strong>.  Please try again after sometime (or) contact Customer support.</p>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            *<label translate for="firstname">register.FirstName</label>
+                            <input type="text" class="form-control required" name="firstname" required #firstname="ngModel" [(ngModel)]="UserRegisterDto.FirstName">
+                            <div translate class="alert alert-danger" *ngIf="(firstname.invalid && (firstname.dirty || firstname.touched)) || (UserRegistrationForm.submitted && firstname.invalid)">
+                                register.warnings.FirstNameRequired
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            *<label translate for="lastname">register.LastName</label>
+                            <input type="text" class="form-control required" name="lastname" required #lastname="ngModel" [(ngModel)]="UserRegisterDto.LastName">
+                            <div translate class="alert alert-danger" *ngIf="(lastname.invalid && (lastname.dirty || lastname.touched)) || (UserRegistrationForm.submitted && lastname.invalid)">
+                                register.warnings.LastNameRequired
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            *<label translate for="email">register.EmailAddress</label>
+                            <input type="email" class="form-control required" name="email" autocomplete="off" pattern="^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$" required #email="ngModel" [(ngModel)]="UserRegisterDto.UserName" disabled="disabled">
+                            <div translate class="alert alert-danger" *ngIf="(email.invalid && (email.dirty || email.touched)) || (UserRegistrationForm.submitted && email.invalid)">
+                                register.warnings.EmailValidRequired
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            *<label translate for="companyname">register.CompanyName</label>
+                            <input type="text" class="form-control required" name="companyname" required #companyname="ngModel"
+                                   [(ngModel)]="UserRegisterDto.CompanyName">
+                            <div translate class="alert alert-danger" *ngIf="(companyname.invalid && (companyname.dirty || companyname.touched)) || (UserRegistrationForm.submitted && companyname.invalid)">
+                                register.warnings.CompanyNameRequired
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            *<label translate for="phone">register.Phone</label>
+                            <input type="text" class="form-control required" name="phone" required #phone="ngModel" [(ngModel)]="UserRegisterDto.Phone">
+                            <div translate class="alert alert-danger" *ngIf="(phone.invalid && (phone.dirty || phone.touched)) || (UserRegistrationForm.submitted && phone.invalid)">
+                                register.warnings.PhoneRequired
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label translate for="mobile">register.Mobile</label>
+                            <input type="text" class="form-control" name="mobile" #mobile="ngModel" [(ngModel)]="UserRegisterDto.Mobile">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            *<label translate for="usercategory">register.UserCategory</label>
+                            <select class="form-control" [(ngModel)]="UserRegisterDto.UserCategoryID" name="usercategory" required #category="ngModel">
+                                <option translate [value]="undefined">PleaseSelect</option>
+                                <option value="{{cnt.ID}}" *ngFor="let cnt of UserRegisterDto?.UserRegisterPickListDto.UserCategoryList">{{cnt.Description}}</option>
+                            </select>
+                            <div translate class="alert alert-danger" *ngIf="((invalidUserCategory && UserRegistrationForm.submitted && UserRegisterDto.UserCategoryID == undefined))">
+                                register.warnings.UserCategoryRequired
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="UserRegisterDto.UserCategoryID == 4" class="col-md-6">
+                        <div class="form-group">
+                            *<label translate for="customerno">register.CustomerNumber</label>
+                            <input type="text" class="form-control required" name="customerno" required #customerno="ngModel" [(ngModel)]="UserRegisterDto.CustomerNo">
+                            <div translate class="alert alert-danger" *ngIf="(customerno.invalid && (customerno.dirty || customerno.touched)) || (UserRegistrationForm.submitted && customerno.invalid)">
+                                register.warnings.CustomerNumberRequired
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            *<label translate for="address">register.AddressLine1</label>
+                            <input type="text" class="form-control required" name="address1" required #address1="ngModel" [(ngModel)]="UserRegisterDto.Address1">
+                            <div translate class="alert alert-danger" *ngIf="(address1.invalid && (address1.dirty || address1.touched)) || (UserRegistrationForm.submitted && address1.invalid)">
+                                register.warnings.AddressRequired
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label translate for="address2">register.AddressLine2</label>
+                            <input type="text" class="form-control" name="address2" #address2="ngModel" [(ngModel)]="UserRegisterDto.Address2">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            *<label translate for="Country">register.Country</label>
+                            <select class="form-control" [(ngModel)]="UserRegisterDto.CountryID" name="Country" required #Country="ngModel"
+                                    (change)="MapState(UserRegisterDto.CountryID)">
+                                <option translate [value]="undefined">PleaseSelect</option>
+                                <option value="{{cnt.ID}}" *ngFor="let cnt of UserRegisterDto?.UserRegisterPickListDto.CountryList">{{cnt.Description}}</option>
+                            </select>
+                            <div translate class="alert alert-danger" *ngIf="(Country.invalid && (Country.dirty || Country.touched)) || (UserRegistrationForm.submitted && Country.invalid)">
+                                register.warnings.CountryRequired
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            *<label translate for="state">register.State</label>
+                            <select class="form-control" [(ngModel)]="UserRegisterDto.StateID" name="state" required #state="ngModel">
+                                <option translate [value]="undefined">PleaseSelect</option>
+                                <option value="{{cnt.ID}}" *ngFor="let cnt of UserRegisterDto?.UserRegisterPickListDto.StateList">{{cnt.Description}}</option>
+                            </select>
+                            <div translate class="alert alert-danger" *ngIf="(state.invalid && (state.dirty || state.touched)) || (UserRegistrationForm.submitted && state.invalid)">
+                                register.warnings.StateRequired
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            *<label translate for="city">register.City</label>
+                            <input type="text" class="form-control required" name="city" required #city="ngModel" [(ngModel)]="UserRegisterDto.City">
+                            <div translate class="alert alert-danger" *ngIf="(city.invalid && (city.dirty || city.touched)) || (UserRegistrationForm.submitted && city.invalid)">
+                                register.warnings.CityRequired
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            *<label translate for="zipcode">register.ZipCode</label>
+                            <input type="text" class="form-control required" name="zipcode" required #zipcode="ngModel" [(ngModel)]="UserRegisterDto.ZipCode">
+                            <div translate class="alert alert-danger" *ngIf="(zipcode.invalid && (zipcode.dirty || zipcode.touched)) || (UserRegistrationForm.submitted && zipcode.invalid)">
+                                register.warnings.PostalCodeRequired
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <addressValidation #addressValidation (UpdatedAddress)="UpdatedAddress($event)"></addressValidation>
+            </div>
+            <div class="row">
+
+            </div>
+            <br />
+            <br />
+            <div class="col-md-12">
+                <div class="form-group">
+                    <button type="button" class="btn btn-default" routerLink="/home" translate>Cancel</button>
+                    <input type="submit" class="btn btn-primary" [disabled]="loading" value="{{ 'Update' | translate }}" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="container body-content" *ngIf="!error && registerSuccess">
+        <div class="row">
+            <div class="col-md-12 alert alert-success">
+                <h4 translate>
+                    AccountSettings.AccountSettingsUpdated
+                </h4>
+                <a routerLink="/home" class="btn btn-link" ><strong translate>BackHome</strong></a>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="container">
+    <ngx-loading [show]="loading">
+    </ngx-loading>
+</div>

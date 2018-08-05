@@ -1,0 +1,16 @@
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{    
+
+    var host = HttpContextAccessor.HttpContext.Request.Host.ToString();
+
+    if (host.ToLower().Contains("pramac"))
+    {
+        Layout = "_LayoutPramac";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+}

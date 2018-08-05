@@ -1,0 +1,144 @@
+﻿<form #upsLoadForm="ngForm" (ngSubmit)="SaveLoadDetails(upsLoadForm.valid)" name="upsLoadForm">
+    <div class="col-sm-12 col-md-8">
+        <div class="col-sm-6">
+            <h4 class="text-primary" translate>loadUPS.LoadUPS</h4>
+            <div class="form-group indent">
+                <label translate>loadUPS.Description</label>
+                <input type="text" class="form-control required" name="Description" placeholder="{{'loadUPS.Description' | translate}}" [(ngModel)]="UPSLoadDto.Description"
+                       required #Description="ngModel" />
+                <div *ngIf="(Description.invalid && (Description.dirty || Description.touched)) && Description?.errors.required || (upsLoadForm.submitted && Description.invalid)"
+                     class="alert alert-danger" translate>
+                    loadUPS.DiscriptionAlert
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>loadUPS.Quantity</label>
+                <input type="text" OnlyNumeric="true" pattern="^0*[1-9]\d*$" class="form-control" name="Quantity" placeholder="Quantity" [(ngModel)]="UPSLoadDto.Quantity"
+                       required #Quantity="ngModel" (keyup)="CalculateLoadCharacteristicsInputs()" />
+                <div *ngIf="(Quantity.invalid && (Quantity.dirty || Quantity.touched)) && Quantity?.errors.required || (upsLoadForm.submitted && Quantity.invalid)"
+                     class="alert alert-danger" translate>
+                    loadUPS.QuantityAlert
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>loadUPS.Sequence</label>
+                <select class="form-control" [(ngModel)]="UPSLoadDto.SequenceID" name="Sequence" required #Sequence="ngModel">
+                    <option value="{{seq.ID}}" *ngFor="let seq of UPSLoadDto?.UPSLoadPickListDto?.SequenceList">{{seq.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>{{'loadUPS.Size'| translate}} (KVA)</label>
+                <div class="form-inline">
+                    <input type="text" OnlyNumeric="true" pattern="^0*[1-9]\d*$" class="form-control" name="SizeKVA" placeholder="Size KVA" [(ngModel)]="UPSLoadDto.SizeKVA"
+                           required #SizeKVA="ngModel" (keyup)="CalculateLoadCharacteristicsInputs()" />
+                    <select class="form-control" [(ngModel)]="UPSLoadDto.SizeKVAUnitsID" name="SizeKVAUnits" required #SizeKVAUnit="ngModel"
+                            (change)="CalculateLoadCharacteristicsInputs()">
+                        <option value="{{size.ID}}" *ngFor="let size of UPSLoadDto?.UPSLoadPickListDto?.SizeKVAUnitsList">{{size.Description}}</option>
+                    </select>
+                </div>
+                <div *ngIf="(SizeKVA.invalid && (SizeKVA.dirty || SizeKVA.touched)) && SizeKVA?.errors.required || (upsLoadForm.submitted && SizeKVA.invalid)"
+                     class="alert alert-danger" translate>
+                    loadUPS.SizeAlert
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>loadUPS.UPSType</label>
+                <select class="form-control" [(ngModel)]="UPSLoadDto.UPSTypeID" name="UPSType" required #Sequence="ngModel" (change)="MapUPSTypeChange(UPSLoadDto.UPSTypeID)">
+                    <option value="{{UPST.ID}}" *ngFor="let UPST of UPSLoadDto?.UPSLoadPickListDto?.UPSTypeList">{{UPST.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            
+            <h4 class="text-primary" translate>loadUPS.HarmonicTypeCharacteristics</h4>
+            <div class="form-group indent">
+                <label>DeviceType</label>
+                <select class="form-control" [(ngModel)]="UPSLoadDto.HarmonicDeviceTypeID" name="HarmonicDeviceType" required #HarmonicDeviceType="ngModel"
+                        (change)="MapHarmonicDeviceTypeChange(UPSLoadDto.HarmonicDeviceTypeID)">
+                    <option value="{{dt.ID}}" *ngFor="let dt of UPSLoadDto?.UPSLoadPickListDto?.HarmonicDeviceTypeList">{{dt.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>{{'loadUPS.HarmonicContent' | translate}} (THID %)</label>
+                <select class="form-control" [(ngModel)]="UPSLoadDto.HarmonicContentID" name="HarmonicContent" required #HarmonicContentType="ngModel"
+                        (change)="CalculateHarmonicDistortionInputs()">
+                    <option value="{{hct.ID}}" *ngFor="let hct of UPSLoadDto?.UPSLoadPickListDto?.HarmonicContentList">{{hct.Description}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <h4 class="text-primary" translate>loadUPS.DeviceInformation</h4>
+            <div class="form-group indent">
+                <label translate>loadUPS.Phase</label>
+                <select class="form-control" [(ngModel)]="UPSLoadDto.PhaseID" name="Phase" required #Phase="ngModel" >
+                    <option value="{{phase.ID}}" *ngFor="let phase of UPSLoadDto?.UPSLoadPickListDto?.PhaseList">{{phase.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>loadUPS.Efficiency</label>
+                <select class="form-control" [(ngModel)]="UPSLoadDto.EfficiencyID" name="Efficiency" required #Efficiency="ngModel" (change)="CalculateLoadCharacteristicsInputs()">
+                    <option value="{{Efficiency.ID}}" *ngFor="let Efficiency of UPSLoadDto?.UPSLoadPickListDto?.EfficiencyList">{{Efficiency.Description}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>loadUPS.ChargeRate</label>
+                <select class="form-control" [(ngModel)]="UPSLoadDto.ChargeRateID" name="ChargeRate" required #ChargeRate="ngModel" (change)="CalculateLoadCharacteristicsInputs()">
+                    <option value="{{CR.ID}}" *ngFor="let CR of UPSLoadDto?.UPSLoadPickListDto?.ChargeRateList">{{CR.Description}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>loadUPS.PowerFactor</label>
+                <select class="form-control" [(ngModel)]="UPSLoadDto.PowerFactorID" name="PowerFactor" required #PowerFactor="ngModel" (change)="CalculateLoadCharacteristicsInputs()">
+                    <option value="{{pf.ID}}" *ngFor="let pf of UPSLoadDto?.UPSLoadPickListDto?.PowerFactorList">{{pf.Description}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>loadUPS.UPSRevertToBattery</label>
+                <input type="checkbox" name="UPSRevertToBattery" [(ngModel)]="UPSLoadDto.UPSRevertToBattery"/>
+            </div>
+            <h4 class="text-primary" translate>loadUPS.MaximumAllowableTransients</h4>
+            <div class="form-group indent">
+                <label translate>loadUPS.VoltageDip</label>
+                <div class="form-inline">
+                    <select class="form-control" [(ngModel)]="UPSLoadDto.VoltageDipID" name="VoltageDip" required #VoltageDip="ngModel">
+                        <option value="{{vDip.ID}}" *ngFor="let vDip of UPSLoadDto?.UPSLoadPickListDto?.VoltageDipList">{{vDip.Description}}</option>
+                    </select>
+                    <select class="form-control" [(ngModel)]="UPSLoadDto.VoltageDipUnitsID" name="VoltageDipUnits" required #VoltageDipUnits="ngModel">
+                        <option value="{{vDU.ID}}" *ngFor="let vDU of UPSLoadDto?.UPSLoadPickListDto?.VoltageDipUnitsList">{{vDU.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>loadUPS.FrequencyDip</label>
+                <div class="form-inline">
+                    <select class="form-control" [(ngModel)]="UPSLoadDto.FrequencyDipID" name="FrequencyDip" required #FrequencyDip="ngModel">
+                        <option value="{{fDip.ID}}" *ngFor="let fDip of UPSLoadDto?.UPSLoadPickListDto?.FrequencyDipList">{{fDip.Description}}</option>
+                    </select>
+                    <select class="form-control" [(ngModel)]="UPSLoadDto.FrequencyDipUnitsID" name="FrequencyDipUnits" required #FrequencyDipUnits="ngModel">
+                        <option value="{{fDU.ID}}" *ngFor="let fDU of UPSLoadDto?.UPSLoadPickListDto?.FrequencyDipUnitsList">{{fDU.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+            </div>
+            <h4 class="text-primary" translate>loadUPS.LoadCharacteristics</h4>
+            <div class="form-group indent">
+                <label translate>loadUPS.LoadLevel</label>
+                <select class="form-control" [(ngModel)]="UPSLoadDto.LoadLevelID" name="LoadLevel" required #LoadLevel="ngModel" (change)="CalculateLoadCharacteristicsInputs()">
+                    <option value="{{ll.ID}}" *ngFor="let ll of UPSLoadDto?.UPSLoadPickListDto?.LoadLevelList">{{ll.Description}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <load-Characteristics [LoadCharacteristicsValues]="loadCharacteristicsValues">
+        </load-Characteristics>
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <div class="actionbuttons text-right">
+            <button type="button" class="btn btn-default" (click)="CancelAddEditLoad()" translate>Cancel</button>
+            <button *ngIf="!readOnlyAccess" type="submit" class="btn btn-primary" translate>Save</button>
+        </div>
+    </div>
+    <div class="container">
+        <ngx-loading [show]="loading">
+        </ngx-loading>
+    </div>
+</form>

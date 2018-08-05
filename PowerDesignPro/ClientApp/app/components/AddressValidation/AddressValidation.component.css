@@ -1,0 +1,5 @@
+﻿.pick-list {
+    min-height: 40px;
+    max-height: 190px;
+    overflow-y: scroll;
+}

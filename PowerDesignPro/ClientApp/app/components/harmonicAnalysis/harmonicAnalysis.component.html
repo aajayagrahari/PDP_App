@@ -1,0 +1,156 @@
+﻿
+<div *ngIf="!noSolution && !noLoads && !loading">
+    <h3 class="indent" translate>harmonicAnalysis.HarmonicAnalysis</h3>
+    <br />
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="form-group col-sm-7">
+                <label translate>harmonicAnalysis.HarmonicProfile</label>
+                <!--<select class="form-control" [(ngModel)]="selectedHarmonicProfile" name="HarmonicProfile" (change)="mapHarmonicProfileChange(selectedHarmonicProfile)">
+                    <option value="{{harmonicProfile.ID}}"
+                            *ngFor="let harmonicProfile of harmonicProfileList">
+                        {{harmonicProfile.LanguageKey | translate}}
+                    </option>
+                </select>-->
+                <select class="form-control" [(ngModel)]="selectedHarmonicProfile" name="HarmonicProfile" (ngModelChange)="onChange($event)" (change)="mapHarmonicProfileChange(selectedHarmonicProfile)">
+                    <option value="{{harmonicProfile.Value}}"
+                            *ngFor="let harmonicProfile of HarmonicAnalysisInputs?.HarmonicProfileList">
+                        {{harmonicProfile.LanguageKey | translate}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group col-sm-5" *ngIf="showSequenceList">
+                <label translate>harmonicAnalysis.Sequence</label>
+                <select class="form-control" [(ngModel)]="selectedSequenceID" name="SelectedSequnce" (change)="mapSequenceChange(selectedSequenceID)">
+                    <option value="{{sequence.SequenceID}}"
+                            *ngFor="let sequence of HarmonicAnalysisInputs?.HarmonicAnalysisSequenceList">
+                        {{sequence.SequenceDescription | translate}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row indent">
+        <div class="col-md-12 indent">
+            <div class="panel panel-default">
+                <table class="table table-condensed">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="col-xs-6 text-muted" translate>{{'harmonicAnalysis.HarmonicProfile' | translate}}:</div>
+                                <div class="col-xs-6 text-left">{{HarmonicAnalysis?.HarmonicProfile | translate}}</div>
+                            </td>
+                            <td>
+                                <div class="col-xs-8 text-muted" translate>{{'harmonicAnalysis.Sequence' |translate}}:</div>
+                                <div class="col-xs-4 text-left">{{HarmonicAnalysis?.Sequence |translate}}</div>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col-xs-6 text-muted" translate>harmonicAnalysis.NonlinearLoad</div>
+                                <div class="col-xs-6 text-left">{{HarmonicAnalysis?.KVANonLinearLoad}}</div>
+                            </td>
+                            <td>
+                                <div class="col-xs-8 text-muted">THID:</div>
+                                <div class="col-xs-4 text-left">{{HarmonicAnalysis?.THID}}%</div>
+                            </td>
+                            <td>
+                                <div class="col-xs-6 text-muted">THVD:</div>
+                                <div class="col-xs-6 text-center">{{HarmonicAnalysis?.THVD}}%</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col-xs-6 text-muted" translate>harmonicAnalysis.allnonlinear</div>
+                                <div class="col-xs-6 text-left">{{HarmonicAnalysis?.KVABase}}</div>
+                            </td>
+                            <td>
+                                <div class="col-xs-8 text-muted" translate>harmonicAnalysis.SelectSequenceHarmonic</div>
+                                <div class="col-xs-4 text-left">{{HarmonicAnalysis?.AlternatorLoading}}%</div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row indent">
+        <div class="col-md-12 indent">
+            <h4 translate>harmonicAnalysis.SelectHarmonicCurrent</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong translate>harmonicAnalysis.Profile</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong>3rd</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong>5th</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong>7th</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong>9th</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong>11th</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong>13th</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong>15th</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong>17th</strong></th>
+                        <th class="text-center" colspan="1" style="border-bottom-width:0px;"><strong>19th</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center" translate>harmonicAnalysis.Current</td>
+                        <td class="text-center">{{HarmonicAnalysis?.CurrentHarmonicDistortion?.HarmonicDistortion3}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.CurrentHarmonicDistortion?.HarmonicDistortion5}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.CurrentHarmonicDistortion?.HarmonicDistortion7}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.CurrentHarmonicDistortion?.HarmonicDistortion9}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.CurrentHarmonicDistortion?.HarmonicDistortion11}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.CurrentHarmonicDistortion?.HarmonicDistortion13}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.CurrentHarmonicDistortion?.HarmonicDistortion15}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.CurrentHarmonicDistortion?.HarmonicDistortion17}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.CurrentHarmonicDistortion?.HarmonicDistortion19}}%</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" translate>harmonicAnalysis.Voltage</td>
+                        <td class="text-center">{{HarmonicAnalysis?.VoltageHarmonicDistortion?.HarmonicDistortion3}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.VoltageHarmonicDistortion?.HarmonicDistortion5}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.VoltageHarmonicDistortion?.HarmonicDistortion7}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.VoltageHarmonicDistortion?.HarmonicDistortion9}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.VoltageHarmonicDistortion?.HarmonicDistortion11}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.VoltageHarmonicDistortion?.HarmonicDistortion13}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.VoltageHarmonicDistortion?.HarmonicDistortion15}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.VoltageHarmonicDistortion?.HarmonicDistortion17}}%</td>
+                        <td class="text-center">{{HarmonicAnalysis?.VoltageHarmonicDistortion?.HarmonicDistortion19}}%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row graph-indent">
+        <div *ngIf="chart" class="col-md-12 graph-indent">
+            <canvas id="canvas">{{chart}}</canvas>
+        </div>
+    </div>
+    <br />
+    <br />
+</div>
+<br />
+<div *ngIf="noSolution && noLoads && !loading">
+    <div class="row indent">
+        <div class="col-sm-8">
+            {{'warning.NosolutionForAnalysis' | translate}}
+        </div>
+    </div>
+</div>
+<div *ngIf="!noSolution && noLoads && !loading">
+    <div class="row indent">
+        <div class="col-sm-8">
+            {{'warning.NoLoadsInSolution' | translate}}
+        </div>
+    </div>
+</div>
+<div class="container">
+    <ngx-loading [show]="loading">
+    </ngx-loading>
+</div>

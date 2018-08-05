@@ -1,0 +1,7 @@
+﻿.panel-signin {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    transform: translateY(50%);
+}

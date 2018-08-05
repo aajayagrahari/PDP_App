@@ -1,0 +1,71 @@
+
+<section class="content_dashboard">
+    <div class="jumbotron">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a routerLink="/home" translate>dashboard.Home</a></li>
+                <li><a [routerLink]="['/project', projectID]">{{projectDetails?.ProjectName}}</a></li>
+                <li class="active" translate>solutionsetup.SolutionSetup</li>
+            </ol>
+            <pdpprojectheader [(projectDetails)]="projectDetails" (updatedProjectDetails)="updatedProjectDetails($event)"></pdpprojectheader>
+        </div>
+    </div>
+
+    <div class="container" *ngIf="ProjectSolutionSetup">
+        <h2 translate>solutionsetup.SolutionSetup</h2>
+
+        <div class="row pdp_projectlistutilities" *ngIf="ProjectSolutionSetup.SolutionID > 0">
+            <div class="col-sm-2">
+                <a class="btn btn-primary" translate [routerLink]="['/project', projectID, 'solution', ProjectSolutionSetup.SolutionID, 'addLoad']">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> solutionsetup.AddLoad
+                </a>
+            </div>
+        </div>
+        <br>
+        <form #solutionSetupForm="ngForm" (ngSubmit)="SaveSolutionSetup(solutionSetupForm.valid)">
+            <fieldset [disabled]="ProjectSolutionSetup.IsReadOnlyAccess">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="form-group">
+                            <label translate tooltip="{{'solutionsetup.SolutionNameToolTip' | translate}}">solutionsetup.SolutionName</label>
+                            <input type="text" [maxlength]="maxLength" class="form-control required" required [(ngModel)]="ProjectSolutionSetup.SolutionName" name="SolutionName" #solutionName="ngModel">
+                        </div>
+                        <div translate class="alert alert-danger" *ngIf="(solutionName.invalid && (solutionName.dirty || solutionName.touched)) || (solutionSetupForm.submitted && solutionName.invalid)">
+                            warning.SolutionNameRequired
+                        </div>
+                        <div translate class="alert alert-danger" *ngIf="!((solutionName.invalid && (solutionName.dirty || solutionName.touched)) || (solutionSetupForm.submitted && solutionName.invalid)) && (showUniqueSolutionNameError)">
+                            <strong translate>solutionsetup.SolutionName</strong> warning.ShowUniqueProjectNameError <strong translate>solutionsetup.SolutionName</strong>.
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label translate tooltip="{{'solutionsetup.SolutionNameToolTip' | translate}}">solutionSection.SpecReference</label>
+                            <input type="text" class="form-control" [(ngModel)]="ProjectSolutionSetup.SpecRefNumber" name="SpecRefNumber">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label translate tooltip="{{'solutionsetup.DescriptionToolTip' | translate}}">solutionsetup.Description</label>
+                            <textarea class="form-control" rows="3" [(ngModel)]="ProjectSolutionSetup.Description" name="Description"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <solutionSetupDetail #solutionSetupDetail [(solutionSetupDto)]="ProjectSolutionSetup.BaseSolutionSetupDto"></solutionSetupDetail>
+                <div class="actionbuttons text-right">
+                    <button type="button" class="btn btn-default" (click)="CancelSolutionSetup()" translate>Cancel</button>
+                    <button type="button" class="btn btn-default" (click)="RestoreUserDefaults()" translate>solutionsetup.RestoreDefaults</button>
+                    <!--<button type="button" class="btn btn-primary" (click)="SaveSolutionSetup()">Save</button>-->
+                    <button type="submit" class="btn btn-primary" translate>Save</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="container">
+        <ngx-loading [show]="loading">
+        </ngx-loading>
+    </div>
+
+</section>

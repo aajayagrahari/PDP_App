@@ -1,0 +1,33 @@
+﻿
+<section class="content_dashboard">
+    <div class="jumbotron">
+        <div class="container">
+            <h2 translate>userDefaultSolutionSetup.UserDefaultSolutionSetup</h2>
+        </div>
+    </div>
+        <div class="alert alert-success alert-dismissible fade in" role="alert" *ngIf="showWelcomeMessage">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <p translate><b translate>{{'userDefaultSolutionSetup.Welcome' | translate}} </b> {{'userDefaultSolutionSetup.DefineDefaultSetting' | translate}}.</p>
+        </div>
+        <div class="container body-content" *ngIf="solutionSetupDto">
+            <form #userDefaultSolutionSetupForm="ngForm" (ngSubmit)="SaveUserDefaultSolutionSetup()">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label translate class="text-required">Required</label>
+                        <hr />
+                    </div>
+                </div>
+                <solutionSetupDetail [(solutionSetupDto)]="solutionSetupDto" #solutionSetupDetailComponent></solutionSetupDetail>
+                <div class="actionbuttons text-right">
+                    <button type="button" class="btn btn-default" (click)="CancelUserDefaultSolutionSetup()" translate>Cancel</button>
+                    <button type="button" class="btn btn-default" (click)="RestoreGlobalDefaults()" translate>RestoreGlobalDefaults</button>
+                    <!--<button type="button" class="btn btn-primary" (click)="SaveUserDefaultSolutionSetup()">Save User Defaults</button>-->
+                    <button type="submit" class="btn btn-primary" translate>SaveUserDefaults</button>
+                </div>
+            </form>
+        </div>
+        <div class="container">
+            <ngx-loading [show]="loading">
+            </ngx-loading>
+        </div>
+</section>

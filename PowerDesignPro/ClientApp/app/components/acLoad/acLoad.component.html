@@ -1,0 +1,105 @@
+﻿<form #acLoadForm="ngForm" (ngSubmit)="SaveLoadDetails(acLoadForm.valid)" name="acLoadForm">
+    <div class="col-sm-12 col-md-8">
+        <div class="col-sm-6">
+            <h4 class="text-primary" translate>acLoad.LoadAC</h4>
+            <div class="form-group indent">
+                <label translate >acLoad.Description</label>
+                <input type="text" class="form-control required" name="Description" placeholder="{{'Description'|translate}}" [(ngModel)]="ACLoadDto.Description"
+                       required #Description="ngModel" />
+                <div *ngIf="(Description.invalid && (Description.dirty || Description.touched)) && Description?.errors.required || (acLoadForm.submitted && Description.invalid)"
+                     class="alert alert-danger" translate>
+                    {{'acLoad.DescriptionAlert' | translate}}.
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>acLoad.Quantity</label>
+                <input type="text" OnlyNumeric="true" pattern="^0*[1-9]\d*$" class="form-control" maxlength="3" name="Quantity" placeholder="Quantity" [(ngModel)]="ACLoadDto.Quantity"
+                       required #Quantity="ngModel" (keyup)="CalculateLoadCharacteristicsInputs()" />
+                <div *ngIf="(Quantity.invalid && (Quantity.dirty || Quantity.touched)) && Quantity?.errors.required || (acLoadForm.submitted && Quantity.invalid)"
+                     class="alert alert-danger" translate>
+                    acLoad.QuantityAlert
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>acLoad.Sequence</label>
+                <select class="form-control" [(ngModel)]="ACLoadDto.SequenceID" name="Sequence" required #Sequence="ngModel">
+                    <option value="{{seq.ID}}" *ngFor="let seq of ACLoadDto?.ACLoadPickListDto?.SequenceList">{{seq.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>acLoad.Cooling</label>
+                <div class="form-inline">
+                    <input type="text" OnlyNumeric="true" pattern="^[1-9][0-9]*(\.[0-9]+)?|\.[0-9]*[1-9][0-9]*$" class="form-control" name="Cooling" placeholder="Cooling" [(ngModel)]="ACLoadDto.Cooling"
+                           required #Cooling="ngModel" (keyup)="CalculateLoadCharacteristicsInputs()" />
+                    <select class="form-control" [(ngModel)]="ACLoadDto.CoolingUnitsID" name="CoolingUnits" required #CoolingUnits="ngModel"
+                            (change)="CalculateLoadCharacteristicsInputs()">
+                        <option value="{{coolingUnit.ID}}" *ngFor="let coolingUnit of ACLoadDto?.ACLoadPickListDto?.CoolingUnitsList">{{coolingUnit.Description}}</option>
+                    </select>
+                </div>
+                <div *ngIf="(Cooling.invalid && (Cooling.dirty || Cooling.touched)) && Cooling?.errors.required || (acLoadForm.submitted && Cooling.invalid)"
+                     class="alert alert-danger" translate>
+                    acLoad.CoolingAlert
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <h4 class="text-primary" translate>acLoad.DeviceInformation</h4>
+            <div class="form-group indent">
+                <label translate>acLoad.Compressors</label>
+                <select class="form-control" [(ngModel)]="ACLoadDto.CompressorsID" name="Compressors" required #Compressors="ngModel" (change)="CalculateLoadCharacteristicsInputs()">
+                    <option value="{{compressor.ID}}" *ngFor="let compressor of ACLoadDto?.ACLoadPickListDto?.CompressorsList">{{compressor.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>acLoad.CoolingLoad</label>
+                <select class="form-control" [(ngModel)]="ACLoadDto.CoolingLoadID" name="CoolingLoad" required #CoolingLoad="ngModel" (change)="CalculateLoadCharacteristicsInputs()">
+                    <option value="{{coolingLoad.ID}}" *ngFor="let coolingLoad of ACLoadDto?.ACLoadPickListDto?.CoolingLoadList">{{coolingLoad.Description}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>acLoad.ReheatLoad</label>
+                <select class="form-control" [(ngModel)]="ACLoadDto.ReheatLoadID" name="ReheatLoad" required #ReheatLoad="ngModel" (change)="CalculateLoadCharacteristicsInputs()">
+                    <option value="{{reheatLoad.ID}}" *ngFor="let reheatLoad of ACLoadDto?.ACLoadPickListDto?.ReheatLoadList">{{reheatLoad.Description}}</option>
+                </select>
+            </div>
+            <h4 class="text-primary" translate>acLoad.MaximumAllowableTransients</h4>
+            <div class="form-group indent">
+                <label translate>acLoad.VoltageDip</label>
+                <div class="form-inline">
+                    <select class="form-control" [(ngModel)]="ACLoadDto.VoltageDipID" name="VoltageDip" required #VoltageDip="ngModel">
+                        <option value="{{vDip.ID}}" *ngFor="let vDip of ACLoadDto?.ACLoadPickListDto?.VoltageDipList">{{vDip.Description}}</option>
+                    </select>
+                    <select class="form-control" [(ngModel)]="ACLoadDto.VoltageDipUnitsID" name="VoltageDipUnits" required #VoltageDipUnits="ngModel" (change)="MapVoltageDipUnitsChange(ACLoadDto.VoltageDipUnitsID)">
+                        <option value="{{vDU.ID}}" *ngFor="let vDU of ACLoadDto?.ACLoadPickListDto?.VoltageDipUnitsList">{{vDU.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>acLoad.FrequencyDip</label>
+                <div class="form-inline">
+                    <select class="form-control" [(ngModel)]="ACLoadDto.FrequencyDipID" name="FrequencyDip" required #FrequencyDip="ngModel">
+                        <option value="{{fDip.ID}}" *ngFor="let fDip of ACLoadDto?.ACLoadPickListDto?.FrequencyDipList">{{fDip.Description}}</option>
+                    </select>
+                    <select class="form-control" [(ngModel)]="ACLoadDto.FrequencyDipUnitsID" name="FrequencyDipUnits" required #FrequencyDipUnits="ngModel" (change)="MapFrequencyDipUnitsChange(ACLoadDto.FrequencyDipUnitsID)">
+                        <option value="{{fDU.ID}}" *ngFor="let fDU of ACLoadDto?.ACLoadPickListDto?.FrequencyDipUnitsList">{{fDU.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <load-Characteristics [LoadCharacteristicsValues]="loadCharacteristicsValues">
+        </load-Characteristics>
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <div class="actionbuttons text-right">
+            <button type="button" class="btn btn-default" (click)="CancelAddEditLoad()" translate>Cancel</button>
+            <button *ngIf="!readOnlyAccess" type="submit" class="btn btn-primary" translate>Save</button>
+        </div>
+    </div>
+    <div class="container">
+        <ngx-loading [show]="loading">
+        </ngx-loading>
+    </div>
+</form>

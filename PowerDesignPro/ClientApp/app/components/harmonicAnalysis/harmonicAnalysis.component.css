@@ -1,0 +1,21 @@
+﻿.indent {
+    padding-left: 16px;
+}
+
+.graph-indent {
+    padding-left: 16px;    
+}
+
+h3 {
+    margin-top: 24px;
+    font-weight: bold;
+}
+
+h4 {
+    font-weight: bold;
+    text-align: center;
+}
+
+thead {
+    background-color: #cccccc;
+}

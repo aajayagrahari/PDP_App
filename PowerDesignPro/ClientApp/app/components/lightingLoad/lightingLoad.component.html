@@ -1,0 +1,129 @@
+﻿<form #lightingLoadForm="ngForm" (ngSubmit)="SaveLoadDetails(lightingLoadForm.valid)" name="lightingLoadForm">
+    <div class="col-sm-12 col-md-8">
+        <div class="col-sm-6">
+            <h4 class="text-primary" translate>lightingload.LoadBasics</h4>
+            <div class="form-group indent">
+                <label translate>lightingload.Description</label>
+                <input type="text" class="form-control required" name="Description" placeholder="Description" [(ngModel)]="LightingLoadDto.Description"
+                       required #Description="ngModel" />
+                <div *ngIf="(Description.invalid && (Description.dirty || Description.touched)) && Description?.errors.required || (lightingLoadForm.submitted && Description.invalid)"
+                     class="alert alert-danger" translate>lightingload.DescriptionAlert
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>lightingload.Quantity</label>
+                <input type="text" OnlyNumeric="true" pattern="^0*[1-9]\d*$" class="form-control" name="Quantity" placeholder="Quantity" [(ngModel)]="LightingLoadDto.Quantity"
+                       required #Quantity="ngModel" (keyup)="CalculateLoadCharacteristicsInputs()" />
+                <div *ngIf="(Quantity.invalid && (Quantity.dirty || Quantity.touched)) && Quantity?.errors.required || (lightingLoadForm.submitted && Quantity.invalid)"
+                     class="alert alert-danger" translate>lightingload.QuantityAlert
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>lightingload.Sequence</label>
+                <select class="form-control" [(ngModel)]="LightingLoadDto.SequenceID" name="Sequence" required #Sequence="ngModel">
+                    <option value="{{seq.ID}}" *ngFor="let seq of LightingLoadDto?.LightingLoadPickListDto?.SequenceList">{{seq.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent" *ngIf="LightingLoadDto.SizeRunningEditable">
+                <label translate>lightingload.SizeRunning</label>
+                <div class="form-inline">
+                    <input type="text" OnlyNumeric="true" pattern="^[1-9][0-9]*(\.[0-9]+)?|\.[0-9]*[1-9][0-9]*$" class="form-control" name="SizeRunning" placeholder="Size Running" [(ngModel)]="LightingLoadDto.SizeRunning"
+                           required #SizeRunning="ngModel" (keyup)="CalculateLoadCharacteristicsInputs()" />
+                    <select class="form-control" [(ngModel)]="LightingLoadDto.SizeRunningUnitsID" name="SizeRunningUnit" required #SizeRunningUnit="ngModel" (change)="MapSizeUnitChange(LightingLoadDto.SizeRunning, 'running')">
+                        <option value="{{size.ID}}" *ngFor="let size of LightingLoadDto?.LightingLoadPickListDto?.SizeUnitsList">{{size.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+                <div *ngIf="(SizeRunning.invalid && (SizeRunning.dirty || SizeRunning.touched)) && SizeRunning?.errors.required || (lightingLoadForm.submitted && SizeRunning.invalid)"
+                     class="alert alert-danger" translate>lightingload.SizeRunningAlert
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>lightingload.LightingType</label>
+                <select class="form-control" [(ngModel)]="LightingLoadDto.LightingTypeID" name="LightingType" #LightingType="ngModel" 
+                        (change)="MapLightingTypeChange(LightingLoadDto.LightingTypeID)">
+                    <option value="{{lt.ID}}" *ngFor="let lt of LightingLoadDto?.LightingLoadPickListDto?.LightingTypeList">{{lt.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <h4 class="text-primary" translate>lightingload.HarmonicTypeCharacteristics</h4>
+            <div class="form-group indent">
+                <label translate>lightingload.DeviceType</label>
+                <select class="form-control" [(ngModel)]="LightingLoadDto.HarmonicDeviceTypeID" name="HarmonicDeviceType" required #HarmonicDeviceType="ngModel"
+                        (change)="MapHarmonicDeviceTypeChange(LightingLoadDto.HarmonicDeviceTypeID)">
+                    <option value="{{dt.ID}}" *ngFor="let dt of LightingLoadDto?.LightingLoadPickListDto?.HarmonicDeviceTypeList">{{dt.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>lightingload.HormonicContent</label>
+                <select class="form-control" [(ngModel)]="LightingLoadDto.HarmonicContentID" name="HarmonicContent" required #HarmonicContentType="ngModel"
+                        (change)="CalculateHarmonicDistortionInputs()">
+                    <option value="{{hct.ID}}" *ngFor="let hct of LightingLoadDto?.LightingLoadPickListDto?.HarmonicContentList">{{hct.Description}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <h4 class="text-primary" translate>lightingload.DeviceInformation</h4>
+             <div class="form-group indent">
+                <label translate>lightingload.VoltagePhase</label>
+                <select class="form-control" [(ngModel)]="LightingLoadDto.VoltagePhaseID" name="VoltagePhase" required #VoltagePhase="ngModel" (change)="MapVoltageNominal(LightingLoadDto.VoltagePhaseID, LightingLoadDto.FrequencyID)">
+                    <option value="{{phase.ID}}" *ngFor="let phase of LightingLoadDto?.LightingLoadPickListDto?.VoltagePhaseList">{{phase.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>lightingload.VoltageNominal</label>
+                <select class="form-control" [(ngModel)]="LightingLoadDto.VoltageNominalID" name="VoltageNominal" required #VoltageNominal="ngModel" (change)="MapVoltageSpecific(LightingLoadDto.VoltageNominalID)">
+                    <option value="{{voltage.ID}}" *ngFor="let voltage of LightingLoadDto?.LightingLoadPickListDto?.VoltageNominalList">{{voltage.Description}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>lightingload.VoltageSpecific</label>
+                <select class="form-control" [(ngModel)]="LightingLoadDto.VoltageSpecificID" name="VoltageSpecific" required #VoltageSpecific="ngModel" (change)="MapVoltageSpecificChange(LightingLoadDto.VoltageDipUnitsID)">
+                    <option value="{{voltage.ID}}" *ngFor="let voltage of LightingLoadDto?.LightingLoadPickListDto?.VoltageSpecificList">{{voltage.Description}}</option>
+                </select>
+            </div>
+            <div class="form-group indent" *ngIf="LightingLoadDto.RunningPFEditable">
+                <label translate>lightingload.RunningPF</label>
+                <select class="form-control" [(ngModel)]="LightingLoadDto.RunningPFID" name="RunningPF" required #RunningPF="ngModel" (change)="CalculateLoadCharacteristicsInputs()">
+                    <option value="{{pf.ID}}" *ngFor="let pf of LightingLoadDto?.LightingLoadPickListDto?.PFList">{{pf.Description}}</option>
+                </select>
+            </div>
+            <h4 class="text-primary" translate>lightingload.MaximumAllowableTransients</h4>
+            <div class="form-group indent">
+                <label>VoltageDip</label>
+                <div class="form-inline">
+                    <select class="form-control" [(ngModel)]="LightingLoadDto.VoltageDipID" name="VoltageDip" required #VoltageDip="ngModel">
+                        <option value="{{vDip.ID}}" *ngFor="let vDip of LightingLoadDto?.LightingLoadPickListDto?.VoltageDipList">{{vDip.Description}}</option>
+                    </select>
+                    <select class="form-control" [(ngModel)]="LightingLoadDto.VoltageDipUnitsID" name="VoltageDipUnits" required #VoltageDipUnits="ngModel" (change)="MapVoltageDipUnitsChange(LightingLoadDto.VoltageDipUnitsID)">
+                        <option value="{{vDU.ID}}" *ngFor="let vDU of LightingLoadDto?.LightingLoadPickListDto?.VoltageDipUnitsList">{{vDU.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>lightingload.FrequencyDip</label>
+                <div class="form-inline">
+                    <select class="form-control" [(ngModel)]="LightingLoadDto.FrequencyDipID" name="FrequencyDip" required #FrequencyDip="ngModel">
+                        <option value="{{fDip.ID}}" *ngFor="let fDip of LightingLoadDto?.LightingLoadPickListDto?.FrequencyDipList">{{fDip.Description}}</option>
+                    </select>
+                    <select class="form-control" [(ngModel)]="LightingLoadDto.FrequencyDipUnitsID" name="FrequencyDipUnits" required #FrequencyDipUnits="ngModel" (change)="MapFrequencyDipUnitsChange(LightingLoadDto.FrequencyDipUnitsID)">
+                        <option value="{{fDU.ID}}" *ngFor="let fDU of LightingLoadDto?.LightingLoadPickListDto?.FrequencyDipUnitsList">{{fDU.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <load-Characteristics [LoadCharacteristicsValues]="loadCharacteristicsValues">
+        </load-Characteristics>
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <div class="actionbuttons text-right">
+            <button type="button" class="btn btn-default" (click)="CancelAddEditLoad()" translate>Cancel</button>
+            <button *ngIf="!readOnlyAccess" type="submit" class="btn btn-primary" translate>Save</button>
+        </div>
+    </div>
+    <div class="container">
+        <ngx-loading [show]="loading">
+        </ngx-loading>
+    </div>
+</form>

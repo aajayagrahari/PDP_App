@@ -1,0 +1,98 @@
+﻿<table class="table table-hover table-bordered" #tblLoads *ngIf="loadSummaryLoads">
+    <thead>
+        <tr>
+            <th rowspan="2" translate>loadCharacteristics.DescriptionSequence</th>
+            <th class="text-center" colspan="2" style="border-bottom-width:0px;"><strong translate>loadCharacteristics.Starting</strong></th>
+            <th class="text-center" colspan="2" style="border-bottom-width:0px;"><strong translate>loadCharacteristics.Running</strong></th>
+            <th class="text-center" colspan="3" style="border-bottom-width:0px;"><strong translate>loadCharacteristics.HarmonicDistortion</strong></th>
+            <th class="text-center" colspan="2" style="border-bottom-width:0px;"><strong translate>loadCharacteristics.Limits</strong></th>
+            <th rowspan="2">&nbsp;</th>
+        </tr>
+        <tr>
+            <th class="text-center">kW</th>
+            <th class="text-center">kVA</th>
+            <th class="text-center">kW</th>
+            <th class="text-center">kVA</th>
+            <th class="text-center">Peak</th>
+            <th class="text-center">Run</th>
+            <th class="text-center">kVA</th>
+            <th class="text-center">Vdip</th>
+            <th class="text-center">Fdip</th>
+        </tr>
+    </thead>
+    <tbody *ngFor="let loadList of loadSummaryLoads.ListOfLoadSummaryLoadList">
+        <tr>
+            <th colspan="11" class="loadgroupheader">{{loadList.SequenceDescription | translate}}</th>
+        </tr>
+        <tr *ngFor="let loadSequence of loadList.LoadSequenceList">
+            <td>
+                <!--<span class="text-muted">{{loadSequence}}</span>-->
+                <span class="text-muted">{{loadSequence.LanguageKey | translate}}:</span> <strong>{{loadSequence.Description}}</strong><br />
+                <span *ngFor="let sequence of loadSequence.KVAPFDescription.split(','), let i=index">
+                <span *ngFor="let data of sequence.split('|')">{{data.trim()| translate}}</span>
+                {{i === loadSequence.KVAPFDescription.split(',').length - 1 ? '' : ','}}
+                </span><br />
+                <span>{{loadSequence.HarmonicsDescription}}</span>
+                <select [disabled]="readOnlyAccess" class="form-control input-sm" [(ngModel)]="loadSequence.SequenceID" (change)="UpdateLoadSequence(loadSequence)">
+                    <option value="{{sequence.ID}}" *ngFor="let sequence of loadSummaryLoads.SequenceList">{{sequence.LanguageKey | translate}}</option>
+                </select>
+            </td>
+            <td class="text-center">{{loadSequence.StartingKW}}</td>
+            <td class="text-center">{{loadSequence.StartingKVA}}</td>
+            <td class="text-center">{{loadSequence.RunningKW}}</td>
+            <td class="text-center">{{loadSequence.RunningKVA}}</td>
+            <td class="text-center">{{loadSequence.THIDMomentary}}</td>
+            <td class="text-center">{{loadSequence.THIDContinuous}}</td>
+            <td class="text-center">{{loadSequence.THIDKva}}</td>
+            <td class="text-center"><label [ngStyle]="getStyle((loadSequence.LimitsVdip < vDipFDipRecommendedProduct.VDip) && !loadList.LoadSequenceSummary.Shed)">{{loadSequence.LimitsVdip}} %</label></td>
+            <td class="text-center">{{loadSequence.LimitsFdip}}</td>
+            <td class="text-right">
+                <a *ngIf="!readOnlyAccess" class="btn btn-default btn-xs" aria-label="Copy Load" title="{{'CopyLoad' | translate}}"
+                   [routerLink]="['/project',loadSummaryLoads.ProjectID,'solution',loadSummaryLoads.SolutionID,'load',loadSequence.LoadID,'copyLoad',loadSequence.SolutionLoadID]">
+                    <span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>
+                </a>
+
+                <a class="btn btn-default btn-xs" aria-label="Edit Load" title="{{'EditLoad' | translate}}"
+                   [routerLink]="['/project',loadSummaryLoads.ProjectID,'solution',loadSummaryLoads.SolutionID,'load',loadSequence.LoadID,'editLoad',loadSequence.SolutionLoadID]">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                </a>
+                <button *ngIf="!readOnlyAccess" type="button" class="btn btn-default btn-xs" title="{{'DeleteLoad' | translate}}" aria-label="Delete Load" (click)="DeleteSolutionLoad($event, loadSummaryLoads?.SolutionID, loadSequence.SolutionLoadID, loadSequence.LoadFamilyID)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+            </td>
+        </tr>
+
+        <tr style="background-color: #cccccc;">
+            <td class="text-center">
+
+                <span *ngIf="loadList?.LoadSequenceSummary.Sequence=='cyclic'" translate>{{'Load_Factor_of' | translate}} {{loadList?.LoadSequenceSummary.LoadFactorDescription}} {{'(_sequence_starting_)' | translate}} </span>
+                <span *ngIf="loadList?.LoadSequenceSummary.Sequence!='cyclic'">{{loadList?.LoadSequenceSummary.LoadFactorDescription | translate}}</span><br />
+                <span>{{loadList?.LoadSequenceSummary.SequencePeakText}} {{'loadCharacteristics.SequencePeak' | translate}}</span><br />
+                <span>{{loadList?.LoadSequenceSummary.ApplicationPeakText}} {{'loadCharacteristics.ApplicationPeak' | translate}}</span>
+            </td>
+            <td class="text-center">{{loadList?.LoadSequenceSummary.StartingKW}}</td>
+            <td class="text-center">{{loadList?.LoadSequenceSummary.StartingKVA}}</td>
+            <td class="text-center">{{loadList?.LoadSequenceSummary.RunningKW}}</td>
+            <td class="text-center">{{loadList?.LoadSequenceSummary.RunningKVA}}</td>
+            <td class="text-center">{{loadList?.LoadSequenceSummary.THIDContinuous}}</td>
+            <td class="text-center">{{loadList?.LoadSequenceSummary.THIDMomentary}}</td>
+            <td class="text-center">{{loadList?.LoadSequenceSummary.THIDKva}}</td>
+            <td class="text-center">
+                {{loadList?.LoadSequenceSummary.VDipPerc}} %<br/>{{loadList?.LoadSequenceSummary.VDipVolts}} Volts
+            </td>
+            <td class="text-center">
+                {{loadList?.LoadSequenceSummary.FDipPerc}} %<br />{{loadList?.LoadSequenceSummary.FDipHertz}} Hertz
+            </td>
+            <td class="text-center">
+                <div *ngIf="!readOnlyAccess" class="checkbox">
+                    <label>
+                        <input [(ngModel)]="loadList?.LoadSequenceSummary.Shed" (change)="UpdateLoadSequenceShedDetail(loadList)" 
+                               type="checkbox" name="Shed"> Shed
+                    </label>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="container" style="position:relative">
+    <ngx-loading [show]="loading" [config]="{ fullScreenBackdrop: false }">
+    </ngx-loading>
+</div>

@@ -1,0 +1,106 @@
+//
+// Jumbotron
+// --------------------------------------------------
+
+
+.jumbotron {
+    padding-top: ($jumbotron-padding / 2);
+    padding-bottom: $jumbotron-padding;
+    margin-bottom: ($jumbotron-padding * 2);
+    color: $jumbotron-color;
+    background-color: $jumbotron-bg;
+
+    h1,
+    .h1 {
+        color: $jumbotron-heading-color;
+    }
+
+    p {
+        margin-bottom: ($jumbotron-padding / 2);
+        font-size: $jumbotron-font-size;
+        font-weight: 200;
+    }
+
+    > hr {
+        border-top-color: darken($jumbotron-bg, 10%);
+    }
+
+    .container &,
+    .container-fluid & {
+        border-radius: $border-radius-large; // Only round corners at higher resolutions if contained in a container
+        padding-left: ($grid-gutter-width / 2);
+        padding-right: ($grid-gutter-width / 2);
+    }
+
+    .container {
+        max-width: 100%;
+    }
+
+    @media screen and (min-width: $screen-sm-min) {
+        padding-top: ($jumbotron-padding * 1.6);
+        padding-bottom: ($jumbotron-padding * 1.6);
+
+        .container &,
+        .container-fluid & {
+            padding-left: ($jumbotron-padding * 2);
+            padding-right: ($jumbotron-padding * 2);
+        }
+
+        h1,
+        .h1 {
+            font-size: $jumbotron-heading-font-size;
+        }
+    }
+}
+
+.jumbotron_secondary {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    margin-bottom: ($jumbotron_secondary-padding * 2);
+    margin-top: ($jumbotron-padding * -2);
+    color: $jumbotron_secondary-color;
+    background-color: $jumbotron_secondary-bg;
+
+    h1,
+    .h1 {
+        color: $jumbotron_secondary-color;
+        margin: 8px 0;
+    }
+
+    p {
+        margin-bottom: ($jumbotron_secondary-padding / 2);
+        font-size: $jumbotron_secondary-font-size;
+        font-weight: 200;
+    }
+
+    > hr {
+        border-top-color: darken($jumbotron_secondary-bg, 10%);
+    }
+
+    .container &,
+    .container-fluid & {
+        border-radius: $border-radius-large; // Only round corners at higher resolutions if contained in a container
+        padding-left: ($grid-gutter-width / 2);
+        padding-right: ($grid-gutter-width / 2);
+    }
+
+    .container {
+        max-width: 100%;
+    }
+
+    @media screen and (min-width: $screen-sm-min) {
+        padding-top: ($jumbotron_secondary-padding * 1.6);
+        padding-bottom: ($jumbotron_secondary-padding * 1.6);
+
+        .container &,
+        .container-fluid & {
+            padding-left: ($jumbotron_secondary-padding * 2);
+            padding-right: ($jumbotron_secondary-padding * 2);
+        }
+
+        h1,
+        .h1 {
+            font-size: $jumbotron_secondary-heading-font-size;
+        }
+    }
+}

@@ -1,0 +1,150 @@
+﻿<fieldset [disabled]="readOnlyAccess">
+    <div *ngIf="GasPiping">
+        <h3 translate>GeneratorSummary</h3>
+        <div class="panel panel-default">
+            <table class="table table-condensed">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="col-xs-4 text-muted" translate>gasPiping.ProductFamily</div>
+                            <div class="col-xs-6 text-left">{{GasPiping.GeneratorSummary?.ProductFamily | translate}}</div>
+                        </td>
+                        <td>
+                            <div class="col-xs-6 text-muted" translate>gasPiping.Generator</div>
+                            <div class="col-xs-6 text-right">{{GasPiping.GeneratorSummary?.Generator}}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="col-xs-4 text-muted" translate>gasPiping.FuelType</div>
+                            <div class="col-xs-6 text-left">{{GasPiping.GeneratorSummary?.FuelType | translate}}</div>
+                        </td>
+                        <td>
+                            <div class="col-xs-8 text-muted" translate>gasPiping.FuelConsumption</div>
+                            <div class="col-xs-4 text-right">{{GasPiping.GeneratorSummary?.FuelConsumption}}</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 translate>gasPiping.GasPipingInputs</h3>
+            </div>
+            <div class="panel-body">
+                <div class="col-sm-6">
+                    <br />
+                    <div class="form-group">
+                        <label translate>gasPiping.SizingMethod</label>
+                        <br />
+                        <select class="form-control" [(ngModel)]="GasPiping.SizingMethodID" name="SizingMethod" (change)="updateGasPiping()">
+                            <option value="{{sizingMethod.ID}}" *ngFor="let sizingMethod of GasPiping?.SizingMethodList">{{sizingMethod.LanguageKey | translate}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group" *ngIf="GasPiping.GeneratorSummary.Quantity > 1">
+                        <label translate>gasPiping.SingleUnit</label>
+                        <br />
+                        <input type="checkbox" [(ngModel)]="GasPiping.SingleUnit" (change)="updateGasPiping()" />
+                    </div>
+                    <div class="form-group">
+                        <label translate>gasPiping.PipeSize</label>
+                        <br />
+                        <select class="form-control" [(ngModel)]="GasPiping.PipeSizeID" name="PipeSize" (change)="updateGasPiping()" [disabled]="GasPiping.SizingMethodID != 4">
+                            <option value="{{pipeSize.ID}}" *ngFor="let pipeSize of GasPiping?.PipeSizeList">{{pipeSize.Description}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <!--<h3>Inputs</h3>-->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="text-primary" translate>gasPiping.Inputs</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-4">
+                                <div class="form-group indent">
+                                    <label class="text-muted" translate>
+                                        {{'gasPiping.SupplyGasPressure' | translate}}
+                                        ({{GasPiping.UnitMeasure.WaterOrPascals}})
+                                    </label>
+                                    <input class="form-control" OnlyNumeric="true" pattern="^[1-9][0-9]*(\.[0-9]+)?|\.[0-9]*[1-9][0-9]*$" type="text" [(ngModel)]="GasPiping.GasPipingInput.SupplyGasPressure" (keyup)="updateGasPiping()" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group indent">
+                                    <label class="text-muted" translate>{{'gasPiping.Lengthofrun' | translate}} ({{GasPiping.UnitMeasure.FeetOrMeters}})</label>
+                                    <input class="form-control" OnlyNumeric="true" pattern="^[1-9][0-9]*(\.[0-9]+)?|\.[0-9]*[1-9][0-9]*$" type="text" [(ngModel)]="GasPiping.GasPipingInput.LengthOfRun" (keyup)="updateGasPiping()" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group indent">
+                                    <label class="text-muted" translate>{{'gasPiping.GeneratorMinPressure' | translate}} ({{GasPiping.UnitMeasure.WaterOrPascals}})</label>
+                                    <input class="form-control" OnlyNumeric="true" pattern="^[1-9][0-9]*(\.[0-9]+)?|\.[0-9]*[1-9][0-9]*$" type="text" [(ngModel)]="GasPiping.GasPipingInput.GeneratorMinPressure" (keyup)="updateGasPiping()" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group indent">
+                                    <label class="text-muted">{{'gasPiping.Numberof90Elbows' | translate}}</label>
+                                    <input class="form-control" OnlyNumeric="true" pattern="^0*[1-9]\d*$" type="text" [(ngModel)]="GasPiping.GasPipingInput.NumberOf90Elbows" (keyup)="updateGasPiping()" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group indent">
+                                    <label class="text-muted">{{'gasPiping.Numberof45Elbows' | translate}}</label>
+                                    <input class="form-control" OnlyNumeric="true" pattern="^0*[1-9]\d*$" type="text" [(ngModel)]="GasPiping.GasPipingInput.NumberOf45Elbows" (keyup)="updateGasPiping()" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group indent">
+                                    <label class="text-muted" translate>{{'gasPiping.NumberofTees' | translate}}</label>
+                                    <input class="form-control" OnlyNumeric="true" pattern="^0*[1-9]\d*$" type="text" [(ngModel)]="GasPiping.GasPipingInput.NumberOfTees" (keyup)="updateGasPiping()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger" role="alert" *ngIf="error">
+                        <p translate>{{error}}.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3 translate>gasPiping.GasPipingSolution</h3>
+        <div class="panel panel-default">
+            <!--<div class="panel-heading">
+                <h4 class="text-primary">Solution</h4>
+            </div>-->
+            <table class="table table-condensed">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="col-xs-8 text-muted" translate>
+                                {{'gasPiping.PressureDrop' | translate}}
+                                ({{GasPiping.UnitMeasure.WaterOrPascals}})
+                            </div>
+                            <div class="col-xs-4 text-left">{{GasPiping.GasPipingSolution?.PressureDrop}}</div>
+                        </td>
+                        <td>
+                            <div class="col-xs-6 text-muted" translate>{{'gasPiping.Allowable' | translate}}</div>
+                            <div class="col-xs-6 text-center">{{AllowablePercentage}} %</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="col-xs-8 text-muted" translate>{{'gasPiping.AvailablePressure' | translate}} ({{GasPiping.UnitMeasure.WaterOrPascals}})</div>
+                            <div class="col-xs-4 text-left">{{GasPiping.GasPipingSolution?.AvailablePressure}}</div>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+    <div *ngIf="!GasPiping && isGaseousProduct">
+        {{'warning.NosolutionForAnalysis' | translate}}
+    </div>
+    <div *ngIf="!GasPiping && !isGaseousProduct" translate>
+        gasPiping.GasfuelFuelCondition        
+    </div>
+</fieldset>

@@ -1,0 +1,19 @@
+﻿/* Brand Colors */
+.table-hover > tbody > tr:hover {
+  background-color: #fae3d3; }
+
+.btn-primary {
+  color: #fff;
+  background-color: #e4701d !important;
+  border-color: #8a4311 !important; }
+
+.btn-primary:hover, .btn-primary:focus {
+  color: #fff;
+  background-color: #a85214 !important;
+  border-color: #8a4311 !important; }
+
+.btn-primary:active {
+  color: #fff;
+  background-color: #8a4311 !important;
+  border-color: #8a4311 !important; }
+

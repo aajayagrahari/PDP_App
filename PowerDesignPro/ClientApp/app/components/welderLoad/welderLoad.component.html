@@ -1,0 +1,132 @@
+﻿<form #welderLoadForm="ngForm" (ngSubmit)="SaveLoadDetails(welderLoadForm.valid)" name="welderLoadForm">
+    <div class="col-sm-12 col-md-8">
+        <div class="col-sm-6">
+            <h4 class="text-primary" translate>welderLoad.LoadBasics</h4>
+            <div class="form-group indent">
+                <label translate>welderLoad.Description</label>
+                <input type="text" class="form-control required" name="Description" placeholder="Description" [(ngModel)]="WelderLoadDto.Description"
+                       required #Description="ngModel" />
+                <div *ngIf="(Description.invalid && (Description.dirty || Description.touched)) && Description?.errors.required || (welderLoadForm.submitted && Description.invalid)"
+                     class="alert alert-danger" translate>
+                    welderLoad.DescriptionAlert
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label  translate>Quantity</label>
+                <input type="text" OnlyNumeric="true" pattern="^0*[1-9]\d*$" class="form-control" name="Quantity" placeholder="Quantity" [(ngModel)]="WelderLoadDto.Quantity"
+                       required #Quantity="ngModel" (keyup)="CalculateLoadCharacteristicsInputs()" />
+                <div *ngIf="(Quantity.invalid && (Quantity.dirty || Quantity.touched)) && Quantity?.errors.required || (welderLoadForm.submitted && Quantity.invalid)"
+                     class="alert alert-danger" translate>
+                    welderLoad.welderLoad.QuantityAlert
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>welderLoad.Sequence</label>
+                <select class="form-control" [(ngModel)]="WelderLoadDto.SequenceID" name="Sequence" required #Sequence="ngModel">
+                    <option value="{{seq.ID}}" *ngFor="let seq of WelderLoadDto?.WelderLoadPickListDto?.SequenceList">{{seq.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent" *ngIf="WelderLoadDto.SizeRunningEditable">
+                <label translate>welderLoad.SizeRunning</label>
+                <div class="form-inline">
+                    <input type="text" OnlyNumeric="true" pattern="^[1-9][0-9]*(\.[0-9]+)?|\.[0-9]*[1-9][0-9]*$" class="form-control" name="SizeRunning" placeholder="Size Running" [(ngModel)]="WelderLoadDto.SizeRunning"
+                           required #SizeRunning="ngModel" (keyup)="CalculateLoadCharacteristicsInputs()" />
+                    <select class="form-control" [(ngModel)]="WelderLoadDto.SizeRunningUnitsID" name="SizeRunningUnit" required #SizeRunningUnit="ngModel" (change)="MapSizeUnitChange(WelderLoadDto.SizeRunning, 'running')">
+                        <option value="{{size.ID}}" *ngFor="let size of WelderLoadDto?.WelderLoadPickListDto?.SizeUnitsList">{{size.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+                <div *ngIf="(SizeRunning.invalid && (SizeRunning.dirty || SizeRunning.touched)) && SizeRunning?.errors.required || (welderLoadForm.submitted && SizeRunning.invalid)"
+                     class="alert alert-danger" translate>
+                    welderLoad.SizeAlert
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>welderLoad.WelderType</label>
+                <select class="form-control" [(ngModel)]="WelderLoadDto.WelderTypeID" name="LightingType" #LightingType="ngModel"
+                        (change)="MapWelderTypeChange(WelderLoadDto.WelderTypeID)">
+                    <option value="{{lt.ID}}" *ngFor="let lt of WelderLoadDto?.WelderLoadPickListDto?.WelderTypeList">{{lt.Description}}</option>
+                </select>
+            </div>
+            <h4 class="text-primary" translate>welderLoad.HarmonicTypeCharacteristics</h4>
+            <div class="form-group indent">
+                <label translate>welderLoad.DeviceType</label>
+                <select class="form-control" [(ngModel)]="WelderLoadDto.HarmonicDeviceTypeID" name="HarmonicDeviceType" required #HarmonicDeviceType="ngModel"
+                        (change)="MapHarmonicDeviceTypeChange(WelderLoadDto.HarmonicDeviceTypeID)">
+                    <option value="{{dt.ID}}" *ngFor="let dt of WelderLoadDto?.WelderLoadPickListDto?.HarmonicDeviceTypeList">{{dt.Description}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>{{'welderLoad.HarmonicContent' | translate}} (THID %)</label>
+                <select class="form-control" [(ngModel)]="WelderLoadDto.HarmonicContentID" name="HarmonicContent" required #HarmonicContentType="ngModel"
+                        (change)="CalculateHarmonicDistortionInputs()">
+                    <option value="{{hct.ID}}" *ngFor="let hct of WelderLoadDto?.WelderLoadPickListDto?.HarmonicContentList">{{hct.Description}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <h4 class="text-primary" translate>welderLoad.DeviceInformation</h4>
+            <div class="form-group indent">
+                <label translate>welderLoad.VoltagePhase</label>
+                <select class="form-control" [(ngModel)]="WelderLoadDto.VoltagePhaseID" name="VoltagePhase" required #VoltagePhase="ngModel" (change)="MapVoltageNominal(WelderLoadDto.VoltagePhaseID, WelderLoadDto.FrequencyID)">
+                    <option value="{{phase.ID}}" *ngFor="let phase of WelderLoadDto?.WelderLoadPickListDto?.VoltagePhaseList">{{phase.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>welderLoad.VoltageNominal</label>
+                <select class="form-control" [(ngModel)]="WelderLoadDto.VoltageNominalID" name="VoltageNominal" required #VoltageNominal="ngModel" (change)="MapVoltageSpecific(WelderLoadDto.VoltageNominalID)">
+                    <option value="{{voltage.ID}}" *ngFor="let voltage of WelderLoadDto?.WelderLoadPickListDto?.VoltageNominalList">{{voltage.LanguageKey | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group indent">
+                <label translate>welderLoad.VoltageSpecific</label>
+                <select class="form-control" [(ngModel)]="WelderLoadDto.VoltageSpecificID" name="VoltageSpecific" required #VoltageSpecific="ngModel" (change)="MapVoltageSpecificChange(WelderLoadDto.VoltageDipUnitsID)">
+                    <option value="{{voltage.ID}}" *ngFor="let voltage of WelderLoadDto?.WelderLoadPickListDto?.VoltageSpecificList">{{voltage.Description}}</option>
+                </select>
+            </div>
+            <div class="form-group indent" *ngIf="WelderLoadDto.RunningPFEditable">
+                <label translate>{{'welderLoad.Running' | translate}} PF</label>
+                <select class="form-control" [(ngModel)]="WelderLoadDto.RunningPFID" name="RunningPF" required #RunningPF="ngModel" (change)="CalculateLoadCharacteristicsInputs()">
+                    <option value="{{pf.ID}}" *ngFor="let pf of WelderLoadDto?.WelderLoadPickListDto?.PFList">{{pf.Description}}</option>
+                </select>
+            </div>
+            <h4 class="text-primary" translate>welderLoad.MaximumAllowableTransients</h4>
+            <div class="form-group indent">
+                <label translate>welderLoad.VoltageDip</label>
+                <div class="form-inline">
+                    <select class="form-control" [(ngModel)]="WelderLoadDto.VoltageDipID" name="VoltageDip" required #VoltageDip="ngModel">
+                        <option value="{{vDip.ID}}" *ngFor="let vDip of WelderLoadDto?.WelderLoadPickListDto?.VoltageDipList">{{vDip.Description}}</option>
+                    </select>
+                    <select class="form-control" [(ngModel)]="WelderLoadDto.VoltageDipUnitsID" name="VoltageDipUnits" required #VoltageDipUnits="ngModel" (change)="MapVoltageDipUnitsChange(WelderLoadDto.VoltageDipUnitsID)">
+                        <option value="{{vDU.ID}}" *ngFor="let vDU of WelderLoadDto?.WelderLoadPickListDto?.VoltageDipUnitsList">{{vDU.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group indent">
+                <label translate>welderLoad.FrequencyDip</label>
+                <div class="form-inline">
+                    <select class="form-control" [(ngModel)]="WelderLoadDto.FrequencyDipID" name="FrequencyDip" required #FrequencyDip="ngModel">
+                        <option value="{{fDip.ID}}" *ngFor="let fDip of WelderLoadDto?.WelderLoadPickListDto?.FrequencyDipList">{{fDip.Description}}</option>
+                    </select>
+                    <select class="form-control" [(ngModel)]="WelderLoadDto.FrequencyDipUnitsID" name="FrequencyDipUnits" required #FrequencyDipUnits="ngModel" (change)="MapFrequencyDipUnitsChange(WelderLoadDto.FrequencyDipUnitsID)">
+                        <option value="{{fDU.ID}}" *ngFor="let fDU of WelderLoadDto?.WelderLoadPickListDto?.FrequencyDipUnitsList">{{fDU.LanguageKey | translate}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <load-Characteristics [LoadCharacteristicsValues]="loadCharacteristicsValues">
+        </load-Characteristics>
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <div class="actionbuttons text-right">
+            <button type="button" class="btn btn-default" (click)="CancelAddEditLoad()"  translate>Cancel</button>
+            <button *ngIf="!readOnlyAccess" type="submit" class="btn btn-primary"  translate>Save</button>
+        </div>
+    </div>
+    <div class="container">
+        <ngx-loading [show]="loading">
+        </ngx-loading>
+    </div>
+</form>
